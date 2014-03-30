@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_gestionUsuarios.png"
+				title="Menú > Gestión de Usuarios" />
+			<p:outputLabel value="Gestión de Usuarios"
+				title="Menú >Gestión de Usuarios" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="0">
+				<p:menuitem id="cero" value="Inicio Gestión de Usuarios"
+					style="font-weight: bold;"
+					url="${requestContextPath}/Usuario/Usuario.jsf"
+					title="Inicio Gestión de Usuarios" />
+					
+				<p:menuitem id="dos" value="Listado Usuarios"					
+					url="${requestContextPath}/Usuario/HistoricoUsuario.jsf"
+					title="Listado Historico de Usuarios" />
+
+			</p:tabMenu>
+		</ui:define>
+		<ui:define name="contenido">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/menuPrincipal/btn_gestionUsuarios.png" />
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>

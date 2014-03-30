@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_proyectos.png"
+			title="Menú > Proyectos" style=" width:32px; heght:32px;" />
+		<p:outputLabel value="Proyectos" title="Menú > Proyectos" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="0">
+			<p:menuitem value="Inicio Proyectos"
+				url="${requestContextPath}/Proyectos/Proyectos.jsf"
+				title="Inicio Proyectos" style="font-weight: bold;" />
+
+			<p:menuitem value="Nuevo" title="Nuevo"
+				url="${requestContextPath}/Proyectos/Nuevo/nuevoProyecto.jsf" />
+
+			<p:menuitem value="Formulación" title="Formulación"
+				url="${requestContextPath}/Proyectos/Formulacion/formulacion.jsf" />
+
+			<p:menuitem value="En Revisión" title="En Revisión"
+				url="${requestContextPath}/Proyectos/EnRevision/enRevision.jsf" />
+
+			<p:menuitem value="En Ejecución" title="En Ejecución"
+				url="${requestContextPath}/Proyectos/EnEjecucion/enEjecucion.jsf" />
+
+			<p:menuitem value="Finalizados" title="Finalizados"
+				url="${requestContextPath}/Proyectos/Finalizados/finalizados.jsf" />
+
+		</p:tabMenu>
+
+	</ui:define>
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/menuPrincipal/btn_proyectos.png" />
+	</ui:define>
+</ui:composition>
+</html>

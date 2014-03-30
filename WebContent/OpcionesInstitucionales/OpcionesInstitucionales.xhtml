@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_opciones3.png"
+			title="Menú > Variables Institucionales" />
+		<p:outputLabel value="Variables Institucionales"
+			title="Menú > Variables Institucionales" />
+	</ui:define>
+	<ui:define name="menu">
+		<!-- 		<ui:include src="/Template/menuOpcionesInstitucionales.xhtml" /> -->
+		<p:tabMenu activeIndex="0">
+			<p:menuitem id="uno" value="Inicio Opciones institucionales"
+				title="Inicio Opciones institucionales" style="font-weight: bold;"
+				url="${requestContextPath}/OpcionesInstitucionales/OpcionesInstitucionales.jsf" />
+			<p:menuitem id="dos" value="Formación Académica"
+				title="Formación Académica"
+				url="${requestContextPath}/OpcionesInstitucionales/FormacionAcademica.jsf" />
+			<p:menuitem id="tres" value="Vinculo Institucional"
+				title="Vinculo Institucional"
+				url="${requestContextPath}/OpcionesInstitucionales/VinculoInstitucional.jsf" />
+			<p:menuitem id="cuatro" value="Tipo Identificación"
+				title="Tipo Identificación"
+				url="${requestContextPath}/OpcionesInstitucionales/TipoIdentificacion.jsf" />
+			<p:menuitem id="cinco" value="Sede - Programa"
+				title="Sede - Programa"
+				url="${requestContextPath}/OpcionesInstitucionales/SedePrograma.jsf" />
+			<p:menuitem id="seis" value="Sede" title="Sede"
+				url="${requestContextPath}/OpcionesInstitucionales/Sede.jsf" />
+			<p:menuitem id="siete" value="Programa" title="Programa"
+				url="${requestContextPath}/OpcionesInstitucionales/Programa.jsf" />
+			<p:menuitem id="ocho" value="País" title="País"
+				url="${requestContextPath}/OpcionesInstitucionales/Pais.jsf" />
+			<p:menuitem id="nueve" value="Región" title="Región"
+				url="${requestContextPath}/OpcionesInstitucionales/Region.jsf" />
+			<p:menuitem id="dies" value="Departamento" title="Departamento"
+				url="${requestContextPath}/OpcionesInstitucionales/Departamento.jsf" />
+			<p:menuitem id="once" value="Municipio" title="Municipio"
+				url="${requestContextPath}/OpcionesInstitucionales/Municipio.jsf" />
+		</p:tabMenu>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/menuPrincipal/btn_opciones3.png" />
+	</ui:define>
+</ui:composition>
+</html>

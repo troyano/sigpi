@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones2.png"
+				title="Menú > Variables de Entidades" />
+			<p:outputLabel value="Variables de Entidades"
+				title="Menú > Variables de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="6">
+				<p:menuitem id="cero" value="Inicio Opciones Entidades"
+					title="Inicio Opciones Entidades"
+					url="/OpcionesEntidades/OpcionesEntidades.jsf" />
+
+				<p:menuitem id="uno" value="Sector" title="Sector"
+					url="/OpcionesEntidades/EntSector.jsf" />
+
+				<p:menuitem id="dos" value="Tamaño Entidad" title="Tamaño Entidad"
+					url="/OpcionesEntidades/EntidadTamano.jsf" />
+
+				<p:menuitem id="tres" value="Tipo Empresa" title="Tipo Empresa"
+					url="/OpcionesEntidades/TipoEmpresa.jsf" />
+
+				<p:menuitem id="cuatro" value="Tipo Entidad" title="Tipo Entidad"
+					url="/OpcionesEntidades/TipoEntidad.jsf" />
+
+				<p:menuitem id="cinco" value="Tipo Contribuyente"
+					title="Tipo Contribuyente"
+					url="/OpcionesEntidades/Contribuyente.jsf" />
+
+				<p:menuitem id="seis" value="Codigo CIIU" title="Codigo CIIU"
+					url="/OpcionesEntidades/CodigoCIIU.jsf" style="font-weight: bold;" />
+
+				<p:menuitem id="siete" value="Rol Entidad" title="Rol Entidad"
+					url="${requestContextPath}/OpcionesEntidades/Rol_entidad.jsf" />
+
+				<p:menuitem id="ocho" value="Variables Financieras"
+					title="Variables Financieras"
+					url="${requestContextPath}/OpcionesEntidades/Variables_financieras.jsf" />
+
+				<p:menuitem id="nueve" value="Indicadores de Variables"
+					title="Indicadores de Variables"
+					url="${requestContextPath}/OpcionesEntidades/Indicadores_variables.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="ciu"
+					value="#{entCiiuBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{ciu.idCiiu}" selection="#{entCiiuBean.selected}"
+					selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Codigo CIIU" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{ciu.seccionCiiu}">
+						<f:facet name="header">
+							<h:outputText value="Sección Ciiu" />
+						</f:facet>
+						<h:outputText value="#{ciu.seccionCiiu}" />
+					</p:column>
+
+					<p:column sortBy="#{ciu.division}">
+						<f:facet name="header">
+							<h:outputText value="Division" />
+						</f:facet>
+						<h:outputText value="#{ciu.division}" />
+					</p:column>
+					<p:column sortBy="#{ciu.grupo}">
+						<f:facet name="header">
+							<h:outputText value="Grupo" />
+						</f:facet>
+						<h:outputText value="#{ciu.grupo}" />
+					</p:column>
+					<p:column sortBy="#{ciu.clase}">
+						<f:facet name="header">
+							<h:outputText value="Clase" />
+						</f:facet>
+						<h:outputText value="#{ciu.clase}" />
+					</p:column>
+					<p:column sortBy="#{ciu.descripcionCiiu}">
+						<f:facet name="header">
+							<h:outputText value="Descripción Ciiu" />
+						</f:facet>
+						<h:outputText value="#{ciu.descripcionCiiu}" />
+					</p:column>
+
+					<p:column sortBy="#{ciu.estadoCiiu}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO" rendered="#{ciu.estadoCiiu==0}" />
+						<h:outputText value="INACTIVO" rendered="#{ciu.estadoCiiu==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener target="#{entCiiuBean.selected}"
+								value="#{ciu}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{entCiiuBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle Codigo CIIU" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditarCiiu">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Seccion Ciiu" />
+							<p:inputText id="seccion"
+								value="#{entCiiuBean.selected.seccionCiiu}" required="true"
+								requiredMessage="Seccion es Obligatorio" label="seccion">
+								<p:ajax update="msgseccion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="seccion" id="msgseccion" display="icon" />
+
+							<h:outputLabel value="Division" />
+							<p:inputText id="division"
+								value="#{entCiiuBean.selected.division}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Grupo" />
+							<p:inputText id="grupo" value="#{entCiiuBean.selected.grupo}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Clase" />
+							<p:inputText id="clase"
+								value="#{entCiiuBean.selected.seccionCiiu}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion"
+								value="#{entCiiuBean.selected.descripcionCiiu}" required="true"
+								requiredMessage="Descripción es Obligatorio" label="descripcion">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entCiiuBean.selected.estadoCiiu}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{entCiiuBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Codigo CIIU" widgetVar="newDialog"
+				update="newForm" resizable="false" id="newDlg" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrearCiiu">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px;">
+
+
+							<h:outputLabel value="Seccion Ciiu" />
+							<p:inputText id="seccion" value="#{entCiiuBean.ciiu.seccionCiiu}"
+								required="true" requiredMessage="Seccion es Obligatorio"
+								label="seccion">
+								<p:ajax update="msgseccion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="seccion" id="msgseccion" display="icon" />
+
+							<h:outputLabel value="Division" />
+							<p:inputText id="division" value="#{entCiiuBean.ciiu.division}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Grupo" />
+							<p:inputText id="grupo" value="#{entCiiuBean.ciiu.grupo}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Clase" />
+							<p:inputText id="clase" value="#{entCiiuBean.ciiu.seccionCiiu}">
+							</p:inputText>
+							<br />
+
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion"
+								value="#{entCiiuBean.ciiu.descripcionCiiu}" required="true"
+								requiredMessage="Descripción es Obligatorio" label="descripcion">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entCiiuBean.ciiu.estadoCiiu}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable,panelCrearCiiu, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{entCiiuBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset" update="newForm,panelCrearCiiu"
+									icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+
+</body>
+</html>

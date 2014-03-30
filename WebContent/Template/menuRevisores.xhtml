@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:tabMenu activeIndex="0">
+		<p:menuitem value="Inicio Revisores"
+			url="${requestContextPath}/Revisores/menuRevisores.jsf"
+			title="Inicio Revisores" />
+
+		<p:menuitem value="Conf. Variables" title="Conf. Variables"
+			url="${requestContextPath}/Revisores/Variables.jsf" />
+
+		<p:menuitem value="Conf. Descriptores" title="Conf. Descriptores"
+			url="${requestContextPath}/Revisores/Descriptores.jsf" />
+
+		<p:menuitem value="Conf. Tipo Variables" title="Conf. Tipo Variables"
+			url="${requestContextPath}/Revisores/TipoVariablesEvaluacion.jsf" />
+
+		<p:menuitem value="Lista de Revisores" title="Lista de Revisores"
+			url="#" />
+
+		<p:menuitem value="Asignación de Revisores"
+			title="Asignación de Revisores" url="#" />
+
+	</p:tabMenu>
+</ui:composition>
+</html>

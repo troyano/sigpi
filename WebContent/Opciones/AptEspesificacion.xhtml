@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones.png"
+				title="Menú > Variables de Proyecto" />
+			<p:outputLabel value="Variables de Proyecto"
+				title="Menú > Variables de Proyecto" />
+		</ui:define>F
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="8">
+				<p:menuitem id="cero" value="Inicio Opciones"
+					url="${requestContextPath}/Opciones/Opciones.jsf"
+					title="Inicio Opciones" />
+
+				<p:menuitem id="uno" value="Área de Investigacion"
+					title="Área de Investigacion" url="/Opciones/AreaInvestigacion.jsf" />
+
+				<p:menuitem id="dos" value="Línea de Investigación"
+					title="Línea de Investigación"
+					url="${requestContextPath}/Opciones/LineaInvestigacion.jsf" />
+
+				<p:menuitem id="tres" value="Clasificación Colciencias"
+					title="Clasificación colciencias"
+					url="${requestContextPath}/Opciones/ClasificacionColciencias.jsf" />
+
+				<p:menuitem id="cuatro" value="Grupos de Investigación"
+					title="Grupos de Investigación"
+					url="${requestContextPath}/Opciones/GrupoInvestigacion.jsf" />
+
+				<p:menuitem id="cinco" value="Semillero de Investigación"
+					title="Semillero de Investigación"
+					url="${requestContextPath}/Opciones/SemilleroInvestigacion.jsf" />
+
+				<p:menuitem id="seis" value="Tipo Proyecto" title=" Tipo Proyecto"
+					url="${requestContextPath}/Opciones/TipoProyecto.jsf" />
+
+				<p:menuitem id="siete" value="Rol Investigador"
+					title="Rol Investigador"
+					url="${requestContextPath}/Opciones/TipoPersonal.jsf" />
+
+				<p:menuitem id="ocho" value="Resultados" title="Resultados"
+					style="font-weight: bold;"
+					url="${requestContextPath}/Opciones/AptEspesificacion.jsf" />
+
+
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="especi"
+					value="#{aptEspesificacionBean.mostrarTodos()}"
+					rowIndexVar="rowIndex" styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{especi.idEspecificacion}"
+					selection="#{aptEspesificacionBean.selected}"
+					selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Resultados" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{especi.descripcionEspecificacion}">
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{especi.descripcionEspecificacion}" />
+					</p:column>
+
+					<p:column sortBy="#{especi.resultadoApt}">
+						<f:facet name="header">
+							<h:outputText value="Resultado" />
+						</f:facet>
+						<h:outputText value="#{especi.resultadoApt}" />
+					</p:column>
+
+
+					<p:column sortBy="#{especi.estadoEspecificacion}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO"
+							rendered="#{especi.estadoEspecificacion==0}" />
+						<h:outputText value="INACTIVO"
+							rendered="#{especi.estadoEspecificacion==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{aptEspesificacionBean.selected}" value="#{especi}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{aptEspesificacionBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle de Resultado" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditarResultado">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{aptEspesificacionBean.selected.descripcionEspecificacion}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripcion">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputLabel value="Resultado" />
+							<p:inputText id="resultado" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{aptEspesificacionBean.selected.resultadoApt}"
+								required="true" requiredMessage="Resultado es Obligatorio"
+								label="Resultado">
+								<p:ajax update="msgresultado" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="resultado" id="msgresultado" display="icon" />
+
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{aptEspesificacionBean.selected.estadoEspecificacion}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+							<br />
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk" title="Guardar Cambios"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{aptEspesificacionBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Especificación Resultado"
+				widgetVar="newDialog" update="newForm" resizable="false" id="newDlg"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrearResultado">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px; ">
+
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{aptEspesificacionBean.espesificacion.descripcionEspecificacion}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripcion">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputLabel value="Resultado" />
+							<p:inputText id="resultado" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{aptEspesificacionBean.espesificacion.resultadoApt}"
+								required="true" requiredMessage="Resultado es Obligatorio"
+								label="Resultado">
+								<p:ajax update="msgresultado" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="resultado" id="msgresultado" display="icon" />
+
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{aptEspesificacionBean.espesificacion.estadoEspecificacion}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+							<br />
+
+
+
+							<f:facet name="footer">
+								<p:commandButton
+									update=":form:dataTable,panelCrearResultado, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{aptEspesificacionBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset"
+									update="newForm,panelCrearResultado" icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+
+</body>
+</html>

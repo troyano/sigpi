@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones2.png"
+				title="Menú > Variables de Entidades" />
+			<p:outputLabel value="Variables de Entidades"
+				title="Menú > Variables de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="8">
+				<p:menuitem id="cero" value="Inicio Opciones Entidades"
+					title="Inicio Opciones Entidades"
+					url="/OpcionesEntidades/OpcionesEntidades.jsf" />
+
+				<p:menuitem id="uno" value="Sector" title="Sector"
+					url="/OpcionesEntidades/EntSector.jsf" />
+
+				<p:menuitem id="dos" value="Tamaño Entidad" title="Tamaño Entidad"
+					url="/OpcionesEntidades/EntidadTamano.jsf" />
+
+				<p:menuitem id="tres" value="Tipo Empresa" title="Tipo Empresa"
+					url="/OpcionesEntidades/TipoEmpresa.jsf" />
+
+				<p:menuitem id="cuatro" value="Tipo Entidad" title="Tipo Entidad"
+					url="/OpcionesEntidades/TipoEntidad.jsf" />
+
+				<p:menuitem id="cinco" value="Tipo Contribuyente"
+					title="Tipo Contribuyente"
+					url="/OpcionesEntidades/Contribuyente.jsf" />
+
+				<p:menuitem id="seis" value="Codigo CIIU" title="Codigo CIIU"
+					url="/OpcionesEntidades/CodigoCIIU.jsf" />
+
+				<p:menuitem id="siete" value="Rol Entidad" title="Rol Entidad"
+					url="${requestContextPath}/OpcionesEntidades/Rol_entidad.jsf" />
+
+				<p:menuitem id="ocho" value="Variables Financieras"
+					title="Variables Financieras" style="font-weight: bold;"
+					url="${requestContextPath}/OpcionesEntidades/Variables_financieras.jsf" />
+
+				<p:menuitem id="nueve" value="Indicadores de Variables"
+					title="Indicadores de Variables"
+					url="${requestContextPath}/OpcionesEntidades/Indicadores_variables.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="var"
+					value="#{entVariables_finacierasBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{var.idVariable}" selection="#{entVariables_finacierasBean.selected}"
+					selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Variables Financierras" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{var.descripcionVariable}" />
+					</p:column>
+
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO" rendered="#{var.estadoVariable==0}" />
+						<h:outputText value="INACTIVO" rendered="#{var.estadoVariable==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener target="#{entVariables_finacierasBean.selected}"
+								value="#{var}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{entVariables_finacierasBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle de Variables Financieras" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditarVar">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descrpcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entVariables_finacierasBean.selected.descripcionVariable}" required="true"
+								requiredMessage="Descripción es Obligatorio" label="Nombre">
+								<p:ajax update="msgDescrpcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descrpcion" id="msgDescrpcion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entVariables_finacierasBean.selected.estadoVariable}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{entVariables_finacierasBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Variable Financiera" widgetVar="newDialog"
+				update="newForm" resizable="false" id="newDlg" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrearVar">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px;">
+
+							<h:outputLabel value="Descripción *" />
+							<p:inputText id="nombre" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entVariables_finacierasBean.variable.descripcionVariable}" required="true"
+								requiredMessage="Nombre es Obligatorio" label="Nombre">
+								<p:ajax update="msgnombre" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombre" id="msgnombre" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entVariables_finacierasBean.variable.estadoVariable}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+							<f:facet name="footer">
+								<p:commandButton
+									update=":form:dataTable,panelCrearVar, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{entVariables_finacierasBean.crear()}" ajax="true" />
+							
+								<p:commandButton type="reset" update="newForm,panelCrearVar"
+									icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+
+
+
+</body>
+</html>

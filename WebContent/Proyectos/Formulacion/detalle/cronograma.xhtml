@@ -1,0 +1,625 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<h:form id="formCronograma">
+
+		<div align="center">
+			<p:outputLabel
+				style="font-weight: bold; text-align:center; color:#000;"
+				value="CRONOGRAMA DEL PROYECTO '#{formulacionBean.selected.nombreProyecto}'" />
+		</div>
+
+
+		<p:commandButton oncomplete="newDialogFase.show()"
+			icon=" ui-icon-plusthick" title="Crear Fase"
+			update=":tabView:newFormFase"
+			style=" margin:0px 1px 0px 1px; float:right; " />
+
+		<br />
+		<p:dataTable id="dataTable" var="fases" rowIndexVar="rowIndex"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+			emptyMessage="No se han encontrado resultados"
+			rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+			value="#{formulacionBean.fasesProyecto()}" rowKey="#{fases.idFase}"
+			selection="#{formulacionBean.selectedFase}">
+			<f:facet name="header">
+				<h:outputText
+					value="Ejecución establecida en : #{formulacionBean.selected.ejecucionCronograma.descripciEjecucion}" />
+			</f:facet>
+
+			<p:column selectionMode="single" style="width:2%" />
+
+			<p:column headerText="N°" style="width:3%;">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+
+			<p:column headerText="FASE" style="width:30%;">
+				<p:outputLabel value="#{fases.nombreFase} "
+					style="font-weight: bold; color:#000;" />
+			</p:column>
+
+			<p:column headerText="Actividades" >
+				<p:dataTable id="dataTableAct" var="act" value="#{fases.actividad}"
+					rowIndexVar="rowIndexGrid" lazy="true"
+					emptyMessage="No hay actividades registradas para esta fase.">
+
+					<p:column style="width:8px; text-align:center;" headerText="N°">
+						<p:outputLabel value="#{rowIndexGrid+1}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+
+							<p:commandButton oncomplete="newDialogActividad.show()"
+								icon="ui-icon-plusthick" title="Crear Actividad"
+								update=":tabView:newFormActividad"
+								style=" margin:-1px 1px -1px 1px; float:right; ">
+								<f:setPropertyActionListener
+									target="#{formulacionBean.selectedFase}" value="#{fases}" />
+							</p:commandButton>
+
+						</f:facet>
+						<p:outputLabel value="#{act.nombreActividad}" />
+
+					</p:column>
+
+				</p:dataTable>
+
+			</p:column>
+			<p:column headerText="Fecha Inicio">
+				<p:outputLabel value="#{fases.fasFechainicio} " />
+			</p:column>
+			<p:column headerText="Fecha Fin">
+				<p:outputLabel value="#{fases.fasFechafin} " />
+			</p:column>
+			<p:column style="width:80px;" >
+				<p:commandButton icon="ui-icon-trash" title="Eliminar Fase"
+					update=":tabView:formCronograma"
+					actionListener="#{formulacionBean.eliminarConograma()}"
+					style=" margin:1px 0px 1px 1px; float:right; ">
+					<f:setPropertyActionListener
+						target="#{formulacionBean.selectedFase}" value="#{fases}" />
+				</p:commandButton>
+				<p:commandButton oncomplete="updateDialog.show()"
+					icon="ui-icon-pencil" title="Editar Fase"
+					update=":tabView:updateDetailFormCronograma"
+					style=" margin:1px 2px 1px 1px; float:right; ">
+					<f:setPropertyActionListener
+						target="#{formulacionBean.selectedFase}" value="#{fases}" />
+				</p:commandButton>
+				<p:commandButton id="viewButton" icon="ui-icon-clipboard"
+					update=":tabView:viewDetailFormCronograma"
+					oncomplete="viewDialog.show()" title="Ver Fase"
+					style=" margin:1px 1px 1px 0px; float:right;">
+					<f:setPropertyActionListener
+						target="#{formulacionBean.selectedFase}" value="#{fases}" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+	<!-- 			***************************************** VENTANA VER MÁS ***********************************************   -->
+	<p:dialog header="Detalle de la Fase" style=" background:#F2F2F2; "
+		widgetVar="viewDialog" id="viewDlg" resizable="false"
+		showEffect="fade" hideEffect="explode" modal="true">
+		<h:form id="viewDetailFormCronograma">
+			<p:panel>
+				<p:panelGrid>
+					<p:row>
+						<p:column colspan="5"
+							styleClass="ui-widget ui-widget-header ui-corner-all"
+							style="font-weight: bold; text-align:center; color:#000;">
+							<p:outputLabel value="#{formulacionBean.selectedFase.nombreFase}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column rowspan="3">
+							<p:outputLabel
+								value="#{formulacionBean.selectedFase.consecutivoFase}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel value="Descripción" />
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								value="#{formulacionBean.selectedFase.descripcionFase}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Inicio" />
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								value="#{formulacionBean.selectedFase.fasFechainicio}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Fin" />
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								value="#{formulacionBean.selectedFase.fasFechafin}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="5">
+							<p:dataTable var="actV"
+								emptyMessage="No hay actividades registradas para esta fase."
+								value="#{formulacionBean.selectedFase.actividad}"
+								rowIndexVar="rowIndexGridV">
+								<f:facet name="header">
+									<p:outputLabel value="Actividades" />
+								</f:facet>
+								<p:column style="width:8px; text-align:center;" headerText="N°">
+									<p:outputLabel value="#{rowIndexGridV+1}" />
+								</p:column>
+								<p:column headerText="Nombre">
+									<p:outputLabel value="#{actV.nombreActividad}" />
+								</p:column>
+								<p:column headerText="Descripción">
+									<p:outputLabel value="#{actV.descripcionActividad}" />
+								</p:column>
+								<p:column headerText="Inicio">
+									<p:outputLabel value="#{actV.nombreActividad}" />
+								</p:column>
+								<p:column headerText="Fin">
+									<p:outputLabel value="#{actV.nombreActividad}" />
+								</p:column>
+								<p:column headerText="Observaciones">
+									<p:outputLabel value="#{actV.observaciones}" />
+								</p:column>
+							</p:dataTable>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<!-- 			***************************************** FIN VER MÁS ***********************************************   -->
+
+
+	<!-- 			***************************************** VENTANA CREAR FASE ***********************************************   -->
+	<p:dialog header="Crear fase" widgetVar="newDialogFase"
+		update=":tabView:newFormFase,panelCrearfase" resizable="false"
+		id="newDlgFase" modal="true">
+		<h:form id="newFormFase">
+			<p:panel id="panelCrearfase">
+				<p:messages id="msgs" autoUpdate="true" />
+
+				<p:panelGrid id="faseNew" columns="3" style="margin:0 auto;">
+
+
+					<h:outputText value="Orden" />
+					<p:inputText id="orden" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.fase.consecutivoFase}" required="true"
+						requiredMessage="El orden es obligatorio." label="Orden">
+						<p:ajax update="msgOrden" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="orden" id="msgOrden" display="icon" />
+
+					<h:outputText value="Nombre" />
+					<p:inputText id="nombreFase" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.fase.nombreFase}" required="true"
+						requiredMessage="Nombre Fase es Obligatorio" label="Nombre">
+						<p:ajax update="msgNombreFase" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="nombreFase" id="msgNombreFase" display="icon" />
+
+
+					<h:outputText value="Descripción" />
+					<p:inputTextarea id="descripcionFase"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.fase.descripcionFase}" required="true"
+						requiredMessage="Descripción Fase es Obligatorio."
+						label="Descripción">
+						<p:ajax update="msgDescripcionFase" event="keyup" onstart="true" />
+					</p:inputTextarea>
+					<p:message for="descripcionFase" id="msgDescripcionFase"
+						display="icon" />
+
+
+					<h:outputText value="Fecha Inicio" />
+					<p:calendar id="fechaInicio" showOn="button" styleClass="input"
+						pattern="yyyy-MM-dd"
+						value="#{formulacionBean.fase.fasFechainicio}" required="true"
+						requiredMessage="Fecha de Inicio es Obligatorio" label="Fecha Fin">
+						<p:ajax update="msgfechaInicio" event="keyup" onstart="true" />
+					</p:calendar>
+					<p:message for="fechaInicio" id="msgfechaInicio" display="icon" />
+
+					<h:outputText value="Fecha Fin" />
+					<p:calendar id="fechaFin" showOn="button" styleClass="input"
+						pattern="yyyy-MM-dd" value="#{formulacionBean.fase.fasFechafin}"
+						required="true" requiredMessage="Fecha Fin es Obligatorio"
+						label="Fecha Inicio">
+						<p:ajax update="msgFechaFin" event="keyup" onstart="true" />
+					</p:calendar>
+					<p:message for="fechaFin" id="msgFechaFin" display="icon" />
+
+					<f:facet name="footer">
+						<p:commandButton
+							update=":tabView:formCronograma:dataTable, :tabView:growlFase"
+							icon="ui-icon-disk" onkeyup="clearForm(newFormFase)"
+							oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlgFase','newFormFase');"
+							action="#{formulacionBean.crearFase()}" ajax="true" />
+
+						<p:commandButton type="reset" icon="ui-icon-refresh"
+							update="newFormFase"></p:commandButton>
+					</f:facet>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<!-- 			***************************************** FIN CREAR FASE ***********************************************   -->
+	<!-- 			***************************************** VENTANA CREAR Actividad ***********************************************   -->
+	<p:dialog
+		header="Crear Actividad - Fase #{formulacionBean.selectedFase.nombreFase}"
+		widgetVar="newDialogActividad"
+		update=":tabView:newFormActividad,panelCrearActividad"
+		resizable="false" id="newDlgActividad" modal="true">
+		<h:form id="newFormActividad">
+			<p:panel id="panelCrearActividad">
+				<p:messages id="msgs" autoUpdate="true" />
+
+				<p:panelGrid id="ActividadNew" columns="3" style="margin:0 auto;">
+
+					<h:outputText value="Nombre" />
+					<p:inputText id="nombreActividad" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.actividadFase.nombreActividad}"
+						required="true" requiredMessage="Nombre es Obligatorio"
+						label="Nombre Actividad">
+						<p:ajax update="msgnombreActividad" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="nombreActividad" id="msgnombreActividad"
+						display="icon" />
+
+					<h:outputText value="Descripción" />
+					<p:inputTextarea id="descripcionActividad"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.actividadFase.descripcionActividad}"
+						required="true"
+						requiredMessage="Descripción Actividad es Obligatorio."
+						label="Descripción Actividad">
+						<p:ajax update="msgDescripcionActividad" event="keyup"
+							onstart="true" />
+					</p:inputTextarea>
+					<p:message for="descripcionActividad" id="msgDescripcionActividad"
+						display="icon" />
+
+					<h:outputText value="Inicio" />
+					<p:inputText id="inicioAdd" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.actividadFase.inicio}" required="true"
+						requiredMessage="El Fin es obligatorio." label="Inicio">
+						<p:ajax update="msgInicioAdd" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="inicioAdd" id="msgInicioAdd" display="icon" />
+
+
+					<h:outputText value="Fin" />
+					<p:inputText id="finAdd" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.actividadFase.fin}" required="true"
+						requiredMessage="El fin es obligatorio." label="Fin">
+						<p:ajax update="msgFinAdd" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="finAdd" id="msgFinAdd" display="icon" />
+
+
+					<h:outputText value="Observaciones" />
+					<p:inputTextarea id="observacionesAdd"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.actividadFase.observaciones}" />
+
+					<br />
+
+					<f:facet name="footer">
+						<p:commandButton
+							update=":tabView:formCronograma:dataTable, :tabView:growlFase"
+							icon="ui-icon-disk" onkeyup="clearForm(newFormActividad)"
+							title="Guardar"
+							oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlgActividad','newFormActividad');"
+							action="#{formulacionBean.crearActividadFase()}" ajax="true" />
+
+						<p:commandButton type="reset" icon="ui-icon-refresh"
+							update="newFormActividad"></p:commandButton>
+					</f:facet>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<!-- 			***************************************** FIN CREAR Actividad ***********************************************   -->
+	<!-- 			***************************************** VENTANA EDITAR CRONOGRAMA ***********************************************   -->
+	<p:dialog header="Detalle de la Fase" style=" background:#F2F2F2; "
+		widgetVar="updateDialog" id="updateDlg" resizable="false"
+		showEffect="fade" hideEffect="explode" modal="true">
+		<h:form id="updateDetailFormCronograma">
+			<p:panel>
+				<p:panelGrid>
+					<p:row>
+						<p:column style="text-align:center; width:30px;">
+							<p:outputLabel value="Orden" style="font-weight: bold;" />
+						</p:column>
+						<p:column>
+							<p:outputLabel value="Nombre Fase" style="font-weight: bold;" />
+						</p:column>
+						<p:column>
+							<p:inputText id="nombreFaseEdit"
+								style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{formulacionBean.selectedFase.nombreFase}"
+								required="true" requiredMessage="Nombre Fase es Obligatorio"
+								label="Nombre">
+								<p:ajax update="msgNombreFaseEdit" event="keyup" onstart="true" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message for="nombreFaseEdit" id="msgNombreFaseEdit"
+								display="icon" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column rowspan="3" headerText="Orden">
+							<p:inputText size="1" maxlength="3"
+								value="#{formulacionBean.selectedFase.consecutivoFase}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel value="Descripción" style="font-weight: bold;" />
+						</p:column>
+						<p:column>
+							<p:inputTextarea id="descripcionFaseEdit"
+								style="text-transform:uppercase; width: 250px;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{formulacionBean.selectedFase.descripcionFase}"
+								required="true"
+								requiredMessage="Descripción Fase es Obligatorio."
+								label="Descripción Fase">
+								<p:ajax update="msgDescripcionFaseEdit" event="keyup"
+									onstart="true" />
+							</p:inputTextarea>
+						</p:column>
+						<p:column>
+							<p:message for="descripcionFaseEdit" id="msgDescripcionFaseEdit"
+								display="icon" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Inicio" style="font-weight: bold;" />
+						</p:column>
+						<p:column>
+							<p:calendar id="fechaInicioEdit" showOn="button"
+								styleClass="input" pattern="yyyy-MM-dd"
+								value="#{formulacionBean.selectedFase.fasFechainicio}"
+								required="true" requiredMessage="Fecha Inicial es Obligatorio"
+								label="Fecha Inicio">
+								<p:ajax update="msgFechaInicioEdit" event="keyup" onstart="true" />
+							</p:calendar>
+						</p:column>
+						<p:column>
+							<p:message for="fechaInicioEdit" id="msgFechaInicioEdit"
+								display="icon" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Fin" style="font-weight: bold;" />
+						</p:column>
+						<p:column>
+							<p:calendar id="fechaFinEdit" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{formulacionBean.selectedFase.fasFechafin}"
+								required="true" requiredMessage="Fecha Final es Obligatorio"
+								label="Fecha Final">
+								<p:ajax update="msgFechaFinEdit" event="keyup" onstart="true" />
+							</p:calendar>
+						</p:column>
+						<p:column>
+							<p:message for="fechaFinEdit" id="msgFechaFinEdit" display="icon" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="ui-widget ui-widget-header ui-corner-all"
+							colspan="4">
+							<!-- BOTON Q GUARDA ÚNICAMENTE LA INFORMACIÓN DE LA FASE     -->
+							<p:commandButton
+								update=":tabView:formCronograma:dataTable, :tabView:growlFase"
+								icon="ui-icon-disk" title="Guardar Cambios"
+								oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','updateDetailForm'); "
+								actionListener="#{formulacionBean.editarFase()}" />
+
+						</p:column>
+
+					</p:row>
+					<p:row>
+						<p:column colspan="5">
+							<p:dataTable var="actV"
+								value="#{formulacionBean.selectedFase.actividad}"
+								emptyMessage="No hay actividades registradas para esta fase."
+								rowIndexVar="rowIndexGridV" lazy="true"
+								rowKey="#{actV.idActividad}"
+								selection="#{formulacionBean.selectedActividad}">
+								<f:facet name="header">
+									<p:outputLabel value="Actividades" />
+								</f:facet>
+
+								<p:column selectionMode="single" style="width:2%" />
+
+								<p:column style="width:8px; text-align:center;" headerText="N°">
+									<p:outputLabel value="#{rowIndexGridV+1}" />
+								</p:column>
+								<p:column headerText="Nombre">
+									<p:outputLabel value="#{actV.nombreActividad}" />
+								</p:column>
+								<p:column headerText="Descripción">
+									<p:outputLabel value="#{actV.descripcionActividad}" />
+								</p:column>
+								<p:column headerText="Inicio">
+									<p:outputLabel value="#{actV.inicio}" />
+								</p:column>
+								<p:column headerText="Fin">
+									<p:outputLabel value="#{actV.fin}" />
+								</p:column>
+								<p:column headerText="Observaciones">
+									<p:outputLabel value="#{actV.observaciones}" />
+								</p:column>
+								<p:column>
+									<p:commandButton icon="ui-icon-trash"
+										title="Eliminar Actividad"
+										update=":tabView:updateDetailFormCronograma"
+										actionListener="#{formulacionBean.eliminarActividadFase()}"
+										style=" margin:1px 0px 1px 1px; float:right; ">
+
+									</p:commandButton>
+									<p:commandButton oncomplete="updateDialogActividad.show()"
+										icon="ui-icon-pencil" title="Editar Actividad"
+										update=":tabView:updateFormActividad"
+										style=" margin:1px 2px 1px 1px; float:right; ">
+										<f:setPropertyActionListener
+											target="#{formulacionBean.selectedActividad}" value="#{actV}" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="ui-widget ui-widget-header ui-corner-all"
+							colspan="4">
+
+						</p:column>
+
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<!-- 			***************************************** FIN EDITAR CRONOGRAMA ***********************************************   -->
+	<!-- 			***************************************** VENTANA EDITAR Actividad ***********************************************   -->
+	<p:dialog header="Detalle Actividad" widgetVar="updateDialogActividad"
+		update=":tabView:newFormActividad,panelCrearActividad"
+		resizable="false" id="updateDlgActividad" modal="true">
+		<h:form id="updateFormActividad">
+			<p:panel id="panelEditarActividad">
+				<p:messages id="msgs" autoUpdate="true" />
+
+				<p:panelGrid id="ActividadNew" columns="3" style="margin:0 auto;">
+
+					<h:outputText value="Nombre" />
+					<p:inputText id="nombreActividadEdit"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.selectedActividad.nombreActividad}"
+						required="true" requiredMessage="Nombre Actividad es Obligatorio"
+						label="Nombre Actividad">
+						<p:ajax update="msgnombreActividadEdit" event="keyup"
+							onstart="true" />
+					</p:inputText>
+					<p:message for="nombreActividadEdit" id="msgnombreActividadEdit"
+						display="icon" />
+
+					<h:outputText value="Descripción" />
+					<p:inputTextarea id="descripcionActividadEdit"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.selectedActividad.descripcionActividad}"
+						required="true"
+						requiredMessage="Descripción Actividad es Obligatorio."
+						label="Descripción Actividad">
+						<p:ajax update="msgDescripcionActividadEdit" event="keyup"
+							onstart="true" />
+					</p:inputTextarea>
+					<p:message for="descripcionActividadEdit"
+						id="msgDescripcionActividadEdit" display="icon" />
+
+					<h:outputText value="Inicio" />
+					<p:inputText id="inicioEdit" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.selectedActividad.inicio}"
+						required="true" requiredMessage="El Fin es obligatorio."
+						label="Inicio">
+						<p:ajax update="msgInicioEdit" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="inicioEdit" id="msgInicioEdit" display="icon" />
+
+
+					<h:outputText value="Fin" />
+					<p:inputText id="finEdit" style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.selectedActividad.fin}" required="true"
+						requiredMessage="El fin es obligatorio." label="Fin">
+						<p:ajax update="msgFinEdit" event="keyup" onstart="true" />
+					</p:inputText>
+					<p:message for="finEdit" id="msgFinEdit" display="icon" />
+
+
+					<h:outputText value="Observaciones" />
+					<p:inputTextarea id="observacionesEdit"
+						style="text-transform:uppercase;"
+						onkeyup="javascript:this.value=this.value.toUpperCase();"
+						value="#{formulacionBean.selectedActividad.observaciones}" />
+
+					<br />
+
+					<f:facet name="footer">
+						<p:commandButton
+							update=":tabView:updateDetailFormCronograma, :tabView:growlFase"
+							icon="ui-icon-disk" onkeyup="clearForm(updateFormActividad)"
+							title="Guardar Cambios"
+							oncomplete=" handleSubmitRequestSub(xhr, status, args, 'updateDlgActividad','updateFormActividad');"
+							action="#{formulacionBean.editarActividad()}" ajax="true" />
+					</f:facet>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<!-- 			***************************************** FIN EDITAR Actividad ***********************************************   -->
+
+	<p:growl id="growlFase" showDetail="true" life="5000" />
+
+	<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialogFase.hide();
+			newDialogActividad.hide();
+			updateDialog.hide();
+			
+		}
+	}
+	function handleSubmitRequestSub(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			updateDialogActividad.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+</h:body>
+
+</html>

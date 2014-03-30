@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones2.png"
+				title="Menú > Variables de Entidades" />
+			<p:outputLabel value="Variables de Entidades"
+				title="Menú > Variables de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="5">
+				<p:menuitem id="cero" value="Inicio Opciones Entidades"
+					title="Inicio Opciones Entidades"
+					url="/OpcionesEntidades/OpcionesEntidades.jsf" />
+
+				<p:menuitem id="uno" value="Sector" title="Sector"
+					url="/OpcionesEntidades/EntSector.jsf" />
+
+				<p:menuitem id="dos" value="Tamaño Entidad" title="Tamaño Entidad"
+					url="/OpcionesEntidades/EntidadTamano.jsf" />
+
+				<p:menuitem id="tres" value="Tipo Empresa" title="Tipo Empresa"
+					url="/OpcionesEntidades/TipoEmpresa.jsf" />
+
+				<p:menuitem id="cuatro" value="Tipo Entidad" title="Tipo Entidad"
+					url="/OpcionesEntidades/TipoEntidad.jsf" />
+
+				<p:menuitem id="cinco" value="Tipo Contribuyente"
+					title="Tipo Contribuyente"
+					url="/OpcionesEntidades/Contribuyente.jsf"
+					style="font-weight: bold;" />
+
+				<p:menuitem id="seis" value="Codigo CIIU" title="Codigo CIIU"
+					url="/OpcionesEntidades/CodigoCIIU.jsf" />
+
+				<p:menuitem id="siete" value="Rol Entidad" title="Rol Entidad"
+					url="${requestContextPath}/OpcionesEntidades/Rol_entidad.jsf" />
+
+				<p:menuitem id="ocho" value="Variables Financieras"
+					title="Variables Financieras"
+					url="${requestContextPath}/OpcionesEntidades/Variables_financieras.jsf" />
+
+				<p:menuitem id="nueve" value="Indicadores de Variables"
+					title="Indicadores de Variables"
+					url="${requestContextPath}/OpcionesEntidades/Indicadores_variables.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="contri" tableStyle="width:auto"
+					value="#{entContribuyenteBean.mostrarTodos()}"
+					rowIndexVar="rowIndex" editable="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="1,3,5,10,15,20,30,40,50,100"
+					rowKey="#{contri.idContribuyente}"
+					selection="#{entContribuyenteBean.selected}" selectionMode="single">
+
+
+
+					<f:facet name="header">
+						<h:outputLabel value="Contribuyente" />
+					</f:facet>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{contri.nombreContribuyente}">
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{contri.nombreContribuyente}" />
+					</p:column>
+
+
+					<p:column sortBy="#{contri.estadoContribuyente}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO"
+							rendered="#{contri.estadoContribuyente==0}" />
+						<h:outputText value="INACTIVO"
+							rendered="#{contri.estadoContribuyente==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{entContribuyenteBean.selected}" value="#{contri}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{entContribuyenteBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle Contribuyente" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditarContribuyente">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Nombre" />
+							<p:inputText id="nombre" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entContribuyenteBean.selected.nombreContribuyente}"
+								required="true" requiredMessage="Nombre es Obligatorio"
+								label="Nombre">
+								<p:ajax update="msgnombre" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombre" id="msgnombre" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entContribuyenteBean.selected.estadoContribuyente}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{entContribuyenteBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Contribuyente" widgetVar="newDialog"
+				update="newForm" resizable="false" id="newDlg" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrearContribuyente">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px;">
+
+
+							<h:outputLabel value="Nombre *" />
+							<p:inputText id="nombre" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entContribuyenteBean.contribuyente.nombreContribuyente}"
+								required="true" requiredMessage="Nombre es Obligatorio"
+								label="Nombre">
+								<p:ajax update="msgnombre" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombre" id="msgnombre" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entContribuyenteBean.contribuyente.estadoContribuyente}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+							<f:facet name="footer">
+								<p:commandButton
+									update=":form:dataTable,panelCrearContribuyente, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{entContribuyenteBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset"
+									update="newForm,panelCrearContribuyente" icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>

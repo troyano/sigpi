@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Pagina de Login</title>
+</h:head>
+<body>
+
+	<p:panel>
+		<form action="j_security_check" method="post">
+
+			Usuario:&nbsp;<input type="text" name="j_username" /> <br />
+
+			Contraseña: <input type="password" name="j_password" /> <br /> <input
+				type="submit" />
+
+		</form>
+	</p:panel>
+</body>
+ 
+<body>
+
+	<h:form id="login" method="post" action="j_security_check"  style="text-align: center;">
+		<p:panelGrid id="panel" columns="2" border="1" style="text-align:left">
+			<f:facet name="header">
+				<h:outputText value="Login" />
+			</f:facet>
+			<h:outputLabel value="Usuario" />
+			<p:inputText type="text" name="j_username" size="25" />
+			<h:outputLabel value="Clave" />
+			<p:inputText type="password" size="15" name="j_password" />
+			<f:facet name="footer">
+				<h:panelGroup style="display:block; text-align:center">
+					<input type="submit" value="submit" />
+				</h:panelGroup>
+			</f:facet>
+		</p:panelGrid>
+	</h:form>
+<h:form id="form">
+
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:panel header="Double Combo" style="margin-bottom:10px;">
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:selectOneMenu id="city" value="#{pprBean.city}">
+					<f:selectItem itemLabel="Select City" itemValue="" />
+					<f:selectItems value="#{pprBean.cities}" />
+					<p:ajax update="suburbs" listener="#{pprBean.handleCityChange}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu id="suburbs" value="#{pprBean.suburb}">
+					<f:selectItem itemLabel="Select Suburb" itemValue="" />
+					<f:selectItems value="#{pprBean.suburbs}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<p:separator />
+
+			<p:commandButton value="Submit" update="msgs"
+				actionListener="#{pprBean.displayLocation}" id="btnSubmit" />
+
+		</p:panel>
+
+	</h:form>
+</body>
+</html>

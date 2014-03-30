@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_revisor.png"
+				title="Menú > Revisores" />
+			<p:outputLabel value="Revisores" title="Menú > Revisores" />
+		</ui:define>
+		<ui:define name="menu">
+			<!-- 		<ui:include src="/Template/menuRevisores.xhtml" /> -->
+			<p:tabMenu activeIndex="3">
+				<p:menuitem id="cero" value="Inicio Revisores"
+					url="${requestContextPath}/Revisores/Revisores.jsf"
+					title="Inicio Revisores" />
+
+				<p:menuitem id="uno" value="Conf. Variables" title="Conf. Variables"
+					url="${requestContextPath}/Revisores/Variables.jsf" />
+
+				<p:menuitem id="dos" value="Conf. Descriptores"
+					title="Conf. Descriptores"
+					url="${requestContextPath}/Revisores/Descriptores.jsf" />
+
+				<p:menuitem id="tres" value="Conf. Tipo Variables"
+					title="Conf. Tipo Variables" style="font-weight: bold;"
+					url="${requestContextPath}/Revisores/TipoVariablesEvaluacion.jsf" />
+
+				<p:menuitem id="cuatro" value="Lista de Revisores"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="cinco" value="Asignación de Revisores"
+					title="Asignación de Revisores" url="#" />
+
+				<p:menuitem id="seis" value="Histórico Proyectos Revisados"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="siete" value="Proyectos por Revisar"
+					title="Proyectos por Revisar" url="#" />
+
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+
+			<h:form id="form">
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="tvar"
+					value="#{tipoVariableEvaluacionBean.mostrarTodos()}"
+					rowIndexVar="rowIndex" styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{tvar.idTipoVariable}"
+					selection="#{tipoVariableEvaluacionBean.selected}"
+					selectionMode="single">
+					<f:facet name="header">
+						<h:outputLabel value="Configuración Tipo Variables Evaluación" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{tvar.descripcionTipoV}" />
+
+					</p:column>
+
+					<p:column sortBy="#{tvar.estadoTipoV}">
+						<f:facet name="header">
+							<h:outputText value="Estado tipo variable" />
+						</f:facet>
+						<h:outputText value="Activo" rendered="#{tvar.estadoTipoV==0}" />
+						<h:outputText value="Inactivo" rendered="#{tvar.estadoTipoV==1}" />
+					</p:column>
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{tipoVariableEvaluacionBean.selected}" value="#{tvar}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{tipoVariableEvaluacionBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:dialog header="Detalle Tipo Variable Evaluación"
+				widgetVar="updateDialog" id="updateDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelEditarClasificacion">
+						<p:messages id="msgs" autoUpdate="true" />
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+							<h:outputText value="Detalle tipo variable" />
+							<p:inputText id="detalle" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{tipoVariableEvaluacionBean.selected.descripcionTipoV}"
+								required="true" requiredMessage="Detalle es Obligatorio"
+								label="Detalle">
+								<p:ajax update="msgdetalle" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="detalle" id="msgdetalle" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{tipoVariableEvaluacionBean.selected.estadoTipoV}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk" title="Guardar"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{tipoVariableEvaluacionBean.editar()}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear una nuevo tipo de variable evaluación"
+				widgetVar="newDialog" update="newForm,panelCrear" resizable="false"
+				id="newDlg">
+				<h:form id="newForm">
+					<p:panel id="panelCrear">
+
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3" style="margin:0 auto;">
+
+							<h:outputText value="Detalle tipo de variable" />
+							<p:inputText id="detalle" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{tipoVariableEvaluacionBean.tVEvaluacion.descripcionTipoV}"
+								required="true" requiredMessage="detalle es Obligatorio"
+								label="Detalle">
+								<p:ajax update="msgdetalle" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="detalle" id="msgdetalle" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{tipoVariableEvaluacionBean.tVEvaluacion.estadoTipoV}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable,panelCrear, :growl"
+									icon="ui-icon-disk"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{tipoVariableEvaluacionBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset" update="newForm"
+									icon="ui-icon-refresh"></p:commandButton>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

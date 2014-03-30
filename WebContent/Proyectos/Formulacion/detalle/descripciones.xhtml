@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<h:form id="formDescripciones">
+
+		<p:panelGrid style="margin-top:0px; width:100%; height:270px ">
+			<p:row>
+				<p:column style="font-weight: bold; text-align:center;"
+					styleClass="ui-widget ui-widget-header ui-corner-all">
+					<h:outputText value="ELEMENTOS DEL PROYECTO"
+						style="text-align:center; font-weight:bold" />
+					<br />
+					<h:outputText style="text-align:center;"
+						value="Todo proyecto de investigación debe enmarcarse en los criterios y lineamientos academicos de la Instición Universitaria Tecnologica de Comfacauca" />
+					<br />
+				</p:column>
+
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:tabView id="tabViewX">
+						<p:tab id="resumen" title="Resumen" >
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Resumen" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="resumenText" style=" width:100%"
+											scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="resumenText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+
+						<p:tab id="problema" title="Problema" >
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Problema" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="problemaText" style=" width:100%"
+											scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="problemaText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="justificacion" title="Justificación"
+							titleStyleClass="tab">
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Justificación" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="justificacionText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="justificacionText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="estadoArte" title="Estado del Arte"
+							titleStyleClass="tab">
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Estado del Arte" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="estadoArteText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="estadoArteText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="objetivos" title="Objetivos" >
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Objetivos" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="objetivosText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="objetivosText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+
+						<p:tab id="marcoTeorico" title="Marco Teórico"
+							titleStyleClass="tab">
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Marco Teórico" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="marcoTeoricoText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="marcoTeoricoText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="metodologia" title="Metodología" >
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Metodología" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="metodologiaText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="metodologiaText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="reseniaGrupo" title="Reseña Grupo"
+							titleStyleClass="tab">
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Reseña Grupo" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="reseniaGrupoText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="reseniaGrupoText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="propiedadIntelectual" title="Propiedad Intelectual"
+							titleStyleClass="tab">
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Propiedad Intelectual" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="propiedadIntelectualText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="propiedadIntelectualText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+						<p:tab id="innovacion" title="Innovación" >
+							<table width="100%" border="0" cellspacing="0">
+								<tr>
+									<td><p:graphicImage url="/image/interrogacion.png"
+											title="Ayuda"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Innovación" /></td>
+									<td>&nbsp;</td>
+									<td><p:graphicImage url="/image/comentario.png"
+											title="Comentario"
+											style="cursor:pointer;height: 32px; width: 32px; border:0px solid #fff ;margin:0px 10px 0px 0px;" />
+										<p:outputLabel value="Comentarios" /></td>
+									<td><p:graphicImage url="/image/sobre.jpg"
+											title="Click para enviar un mensaje al correo del líder del proyecto"
+											style=" cursor:pointer; border:0px solid #fff ;margin:0px 0px 0px 0px;" />
+									</td>
+								</tr>
+								<tr>
+									<td><p:inputTextarea id="innovacionText"
+											style=" width:100%" scrollHeight="10" /></td>
+									<td>&nbsp;</td>
+									<td colspan="2" align="right"><p:inputTextarea
+											id="innovacionText_comentario"
+											style=" width:100%; background-color: #F2F2F2;" /></td>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td align="center" valign="top" height="auto"><p:graphicImage
+														url="/image/save.png" title="Guardar"
+														style="cursor:pointer;height: 32px; width: 32px; " /></td>
+											</tr>
+										</table>
+
+									</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+
+							</table>
+						</p:tab>
+					</p:tabView>
+				</p:column>
+
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+</h:body>
+
+
+</html>

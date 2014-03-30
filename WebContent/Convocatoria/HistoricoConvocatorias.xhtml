@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<body>
+
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_convocatoria2.png"
+				title="Menú > Convocatoria" />
+			<p:outputLabel value="Convocatoria" title="Menú > Convocatoria" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="2">
+				<p:menuitem value="Inicio Convocatorias"
+					title="Inicio Convocatorias" url="Convocatorias.jsf" />
+				<p:menuitem value="Crear Nueva" title="Crear Nueva"
+					url="/Convocatoria/CrudConvocatoria.jsf" />
+				<p:menuitem value="Histórico" title="Histórico"
+					style="font-weight: bold;"
+					url="/Convocatoria/HistoricoConvocatorias.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+			<h:form enctype="multipart/form-data" styleClass="panel">
+				<p:panel id="nueva_convocatoria"
+					header="Información básica de la nueva convocatoria"
+					styleClass="panel" style="border:0px">
+
+					<table width="100%" align="center" border="0"
+						style="margin: 10px 0px 10px 0px;" cellspacing="10">
+						<tr>
+							<td colspan="4" align="left"><p:outputLabel
+									style="text-align:right;" value="Nombre de la Convocatoria"
+									styleClass="label" /> <br /> <p:inputText id="convocatoria"
+									title="Descripción de la Convocatoria" style="width:100%;"
+									styleClass="input" /></td>
+							<td rowspan="4" align="right" valign="top">
+								<table
+									style="border: 1px solid #A4A4A4; background-color: #D8D8D8; width: 45px;">
+									<tr>
+										<td align="center" valign="top" height="auto"><p:graphicImage
+												url="${requestContextPath}/resources/images/add.png"
+												alt="Adicionar" title="Adicionar nuevo"
+												style="cursor:pointer; height: 32px; width: 32px; border:0px solid #fff; margin:2px 0px 2px 0px;"></p:graphicImage>
+											<br /> <p:graphicImage
+												url="${requestContextPath}/resources/images/clear.png"
+												alt="Limpiar" title="Limpiar"
+												style="cursor:pointer; height: 32px; width: 32px; border:0px solid #fff; margin:2px 1px 2px 1px;"></p:graphicImage>
+											<br /> <p:graphicImage
+												url="${requestContextPath}/resources/images/save.png"
+												alt="Guardar" title="Guardar"
+												style="cursor:pointer; 32px; width: 32px; border:0px solid #fff ;margin:2px 1px 2px 1px;"></p:graphicImage>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td align="left"><p:outputLabel value="Fecha Apertura"
+									styleClass="input" /></td>
+							<td><p:calendar id="fecha_apertura" showOn="button"
+									styleClass="input">
+
+								</p:calendar></td>
+							<td align="left"><p:outputLabel value="Fecha Cierre"
+									styleClass="input" /></td>
+							<td><p:calendar id="fecha_cierre" showOn="button"
+									styleClass="input" /></td>
+						</tr>
+						<tr>
+							<td align="left"><p:outputLabel value="Publicación"
+									styleClass="label" /></td>
+							<td><p:calendar id="publicacion" showOn="button"
+									styleClass="input" /></td>
+							<td>&ensp;</td>
+							<td>&ensp;</td>
+						</tr>
+						<tr>
+							<td colspan="4" align="left">
+								<p /> <p:outputLabel style="margin-buttom:10px;"
+									value="Terminos de Referencia" styleClass="label" />
+								<p /> <p:fileUpload
+									fileUploadListener="#{fileUploadController.handleFileUpload}"
+									mode="advanced" update="messages" auto="true"
+									sizeLimit="100000" label="Examinar"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" /> <p:growl
+									id="messages" showDetail="true" />
+
+							</td>
+						</tr>
+					</table>
+				</p:panel>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

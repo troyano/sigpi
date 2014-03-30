@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_revisor.png"
+				title="Menú > Revisores" />
+			<p:outputLabel value="Revisores" title="Menú > Revisores" />
+		</ui:define>
+		<ui:define name="menu">
+			<!-- 		<ui:include src="/Template/menuRevisores.xhtml" /> -->
+			<p:tabMenu activeIndex="1">
+				<p:menuitem id="cero" value="Inicio Revisores"
+					url="${requestContextPath}/Revisores/Revisores.jsf"
+					title="Inicio Revisores" />
+
+				<p:menuitem id="uno" value="Conf. Variables" title="Conf. Variables"
+					style="font-weight: bold;"
+					url="${requestContextPath}/Revisores/Variables.jsf" />
+
+				<p:menuitem id="dos" value="Conf. Descriptores"
+					title="Conf. Descriptores"
+					url="${requestContextPath}/Revisores/Descriptores.jsf" />
+
+				<p:menuitem id="tres" value="Conf. Tipo Variables"
+					title="Conf. Tipo Variables"
+					url="${requestContextPath}/Revisores/TipoVariablesEvaluacion.jsf" />
+
+				<p:menuitem id="cuatro" value="Lista de Revisores"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="cinco" value="Asignación de Revisores"
+					title="Asignación de Revisores" url="#" />
+
+				<p:menuitem id="seis" value="Histórico Proyectos Revisados"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="siete" value="Proyectos por Revisar"
+					title="Proyectos por Revisar" url="#" />
+
+			</p:tabMenu>
+		</ui:define>
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+				<p:dataTable id="dataTable" var="var"
+					value="#{variablesBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="userDataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{var.idVariable}" selection="#{variablesBean.selected}"
+					selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Variables de Evaluación" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{var.variable}">
+						<f:facet name="header">
+							<h:outputText value="variable padre" />
+						</f:facet>
+						<h:outputText value="#{var.variable.descripcionVariable}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Variable" />
+						</f:facet>
+						<h:outputText value="#{var.descripcionVariable}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Puntaje Máximo" />
+						</f:facet>
+						<h:outputText value="#{var.puntajeMax}" />
+					</p:column>
+
+					<p:column sortBy="#{var.fechaEstado}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Fecha Estado" />
+						</f:facet>
+						<h:outputText value="#{var.fechaEstado}" />
+					</p:column>
+
+
+					<p:column sortBy="#{var.tipoVariableEvaluacion}">
+						<f:facet name="header">
+							<h:outputText value="Tipo de Variable" />
+						</f:facet>
+						<h:outputText
+							value="#{var.tipoVariableEvaluacion.descripcionTipoV}" />
+					</p:column>
+
+					<p:column sortBy="#{var.estadoVariable}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="Activo" rendered="#{var.estadoVariable==0}">
+						</h:outputText>
+						<h:outputText value="Inactivo" rendered="#{var.estadoVariable==1}" />
+					</p:column>
+
+
+					<p:column style="width:1%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener target="#{variablesBean.selected}"
+								value="#{var}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:dialog header="Detalle de la Variale" widgetVar="updateDialog"
+				id="updateDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelCrear">
+						<p:messages id="msgs" autoUpdate="true" />
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+							<h:outputText value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{variablesBean.selected.descripcionVariable}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Puntaje Máximo" />
+							<p:inputText id="puntajeM" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{variablesBean.selected.puntajeMax}" required="true"
+								requiredMessage="Puntaje Máximo es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgPuntaje" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="puntajeM" id="msgPuntaje" display="icon" />
+
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{variablesBean.selected.estadoVariable}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+							<br />
+
+							<h:outputText value="Fecha Cambio de estado" />
+							<p:calendar id="fechaCreacion" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{variablesBean.selected.fechaEstado}">
+
+							</p:calendar>
+							<br />
+
+							<h:outputText value="Tipo de Variable" />
+							<p:selectOneMenu id="tipoVEdit"
+								value="#{variablesBean.selected.tipoVariableEvaluacion}">
+								<f:selectItem
+									itemLabel="#{variablesBean.selected.tipoVariableEvaluacion.descripcionTipoV}"
+									itemValue="#{variablesBean.selected.tipoVariableEvaluacion}" />
+								<f:selectItems value="#{variablesBean.mostrarTodosTiposV()}"
+									var="tipoV" itemLabel="#{tipoV.descripcionTipoV}" />
+								<p:ajax update="msgtipoV" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<p:message for="tipoVEdit" id="msgtipoV" display="icon" />
+
+							<h:outputText value="Variable Padre" />
+							<p:selectOneMenu id="varPadreEdit"
+								value="#{variablesBean.selected.variable}">
+								<f:selectItem
+									itemLabel="#{variablesBean.selected.variable.descripcionVariable}"
+									itemValue="#{variablesBean.selected.tipoVariableEvaluacion}" />
+								<f:selectItems value="#{variablesBean.mostrarTodosvariables()}"
+									var="vari" itemLabel="#{vari.descripcionVariable}" />
+
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<br />
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','updateDetailForm'); "
+									actionListener="#{variablesBean.editar}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear nueva Variable" widgetVar="newDialog"
+				update="newForm,panelCrear" resizable="false" id="newDlg"
+				modal="true">
+				<h:form id="newForm">
+					<p:panel id="panelCrear">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3" style="margin:0 auto;">
+
+							<h:outputText value="Variable" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{variablesBean.variables.descripcionVariable}"
+								required="true" requiredMessage="Variable es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Puntaje Máximo" />
+							<p:inputText id="puntajeM" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{variablesBean.variables.puntajeMax}" required="true"
+								requiredMessage="Puntaje Máximo es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgPuntaje" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="puntajeM" id="msgPuntaje" display="icon" />
+
+
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{variablesBean.variables.estadoVariable}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+							<br />
+
+							<h:outputText value="Tipo de Variable" />
+							<p:selectOneMenu id="tipoVAdd" required="true"
+								requiredMessage="Campo Tipo Variable obligatorio"
+								value="#{variablesBean.variables.tipoVariableEvaluacion}">
+								<f:selectItem itemLabel="Seleccione" />
+								<f:selectItems value="#{variablesBean.mostrarTodosTiposV()}"
+									var="tipoV" itemLabel="#{tipoV.descripcionTipoV}" />
+								<p:ajax update="msgtipoVAdd" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<p:message for="tipoVAdd" id="msgtipoVAdd" display="icon" />
+
+							<h:outputText value="Variable Padre" />
+							<p:selectOneMenu id="varPadreEdit"
+								value="#{variablesBean.variables.variable}">
+								<f:selectItem itemLabel="Seleccione" />
+								<f:selectItems value="#{variablesBean.mostrarTodosvariables()}"
+									var="vari" itemLabel="#{vari.descripcionVariable}" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+							<br />
+							<f:facet name="footer">
+								<p:commandButton icon="ui-icon-disk"
+									update=":form:dataTable,panelCrear"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{variablesBean.crear()}" ajax="true" />
+
+								<p:commandButton type="reset" icon=".ui-icon-refresh"
+									update="newForm"></p:commandButton>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

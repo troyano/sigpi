@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<h:form id="formGeneralidades">
+
+		<table align="center" width="100%" border="0">
+			<tr>
+				<td><p:panelGrid style="margin-top:0px; width:100%; ">
+						<p:row>
+							<p:column colspan="6" style="font-weight: bold; text-align:center;"
+								styleClass="ui-widget ui-widget-header ui-corner-all">
+								<p:outputLabel value="Datos Básicos del proyecto" />
+							</p:column>
+
+
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Entidad Ejecutora" />
+							</p:column>
+							<p:column colspan="4" style="font-weight: bold;">
+								<p:selectOneMenu id="entidadEjecutora" style="width:95%">
+									<f:selectItem itemLabel="   ----------    " itemValue="" />
+									<f:selectItem itemLabel="   ----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							
+
+							<p:column>
+							</p:column>
+
+						</p:row>
+
+
+
+
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Area de Investigación" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="listaArea" style="">
+									<f:selectItem itemLabel="   ----------   " itemValue="" />
+									<f:selectItem itemLabel="   ----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Linea de Investigación" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="listaLinea">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+
+						</p:row>
+
+						<p:row>
+
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Sede" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="sede" style="">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Lugar de Ejecución" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="lugarEjecuion" style="">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+
+						</p:row>
+
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Duracion en meses" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:inputText id="duracio_meses" style="width:50px" />
+							</p:column>
+							<p:column>
+							</p:column>
+
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Ejecución del cronograma" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="ejecucionCronograma" style="">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Valor total del Proyecto" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="valorProyecto" style="">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Tipo de Proyecto" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="tipoProyecto" style="">
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+									<f:selectItem itemLabel="   -----------   " itemValue="" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+							</p:column>
+
+						</p:row>
+					</p:panelGrid></td>
+				<td align="right"  width="70px"><p:panel
+						styleClass="ui-widget ui-widget-header ui-corner-all"
+						style=" width:52px;">
+
+
+					</p:panel></td>
+			</tr>
+		</table>
+
+	</h:form>
+</h:body>
+</html>

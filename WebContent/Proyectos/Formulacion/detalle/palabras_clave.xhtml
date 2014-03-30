@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<h:form id="formPalabras">
+
+		<p:panel id="panelps" header="Productos y Servicios"
+			style="background:#F2F2F2; text-align:center; ">
+
+			<p:panelGrid style="margin-top:0px; width:100%; ">
+				<p:row>
+					<p:column style="font-weight: bold;width: 35%;border-color:#fff; ">
+
+					</p:column>
+					<p:column style="font-weight: bold; width: 5% ; border-color:#fff;">
+						<p:outputLabel value="Entidad" />
+					</p:column>
+					<p:column style="font-weight: bold; width:15%;border-color:#fff;">
+						<p:selectOneMenu id="entidadList" style="width:250px;"
+							value="#{entProductosservicioBean.entidad}" label="Entidad">
+							<f:selectItem itemLabel="Seleccione" />
+							<f:selectItems
+								value="#{entProductosservicioBean.listaEntEntidad()}" var="ent"
+								itemLabel="#{ent.nombreEntidad}" />
+							<f:converter converterId="GenericConvertEntity" />
+
+							<p:ajax update="dataTable,entidadList,paneldataTable"
+								event="change" process="dataTable,entidadList"
+								listener="#{entProductosservicioBean.listaChange()}" />
+
+						</p:selectOneMenu>
+
+					</p:column>
+					<p:column style="font-weight: bold;width: 35%;border-color:#fff; ">
+
+					</p:column>
+				</p:row>
+				<br />
+			</p:panelGrid>
+		</p:panel>
+		<p:panel id="paneldataTable"
+			style="margin-top:5px;background:#F2F2F2;">
+
+			<p:commandButton id="crear" oncomplete="newDialog.show()"
+				icon=" ui-icon-plusthick" title="Crear"
+				style=" margin:0px 1px 0px 1px; float:right; "
+				rendered="#{entProductosservicioBean.estadoCrear}" />
+
+			<br />
+
+			<p:dataTable id="dataTable" var="ps"
+				value="#{entProductosservicioBean.listaEntProductosservicio}"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+				emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+				rowKey="#{ps.idProductosServicios}"
+				selection="#{entProductosservicioBean.selected}"
+				selectionMode="single">
+
+				<f:facet name="header">
+				</f:facet>
+
+				<p:column selectionMode="single" style="width:2%" />
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="N°" />
+					</f:facet>
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Nombre Proyecto" />
+					</f:facet>
+					<h:outputText value="#{ps.entEntidad.nombreEntidad}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Palabras Claves" />
+					</f:facet>
+					<h:outputText value="#{ps.nombreProductoServicio}" />
+				</p:column>
+
+				<p:column style="width:2%">
+					<p:commandButton id="selectButton" update=":updateDetailForm"
+						oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+						title="Editar">
+						<f:setPropertyActionListener
+							target="#{entProductosservicioBean.selected}" value="#{ps}" />
+					</p:commandButton>
+
+					<p:commandButton
+						onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+						actionListener="#{entCiiuBean.eliminareditar()}"
+						update="dataTable" icon="ui-icon-trash" title="Eliminar"
+						style=" margin:0px 0px 0px 5px;" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+			***************************************** VENTANA EDITAR ***********************************************  
+
+
+
+	<p:dialog header="Detalle Producto / Servicio" widgetVar="updateDialog"
+		id="updtaeDlg" resizable="false" showEffect="fade"
+		hideEffect="explode" modal="true">
+		<h:form id="updateDetailForm">
+			<p:panel id="panelEditar">
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<p:panelGrid style="margin-top:0px; width:100%; ">
+					<p:row>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Entidad" />
+						</p:column>
+						<p:column colspan="4" style="font-weight: bold;">
+							<h:outputLabel id="nombreentidad" disabled="true"
+								value="#{ps.entEntidad.nombreEntidad}" />
+						</p:column>
+						<p:column />
+
+					</p:row>
+					<p:row>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Nombre Producto" />
+						</p:column>
+						<p:column colspan="" style="font-weight: bold;">
+							<p:inputText id="nombreproducto" required="true"
+								style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								requiredMessage="Nombre Producto / Servicio es Obligatorio."
+								value="#{entProductosservicioBean.selected.nombreProductoServicio}">
+								<p:ajax update="msgnombreP" event="keyup" onstart="true" />
+							</p:inputText>
+
+						</p:column>
+						<p:column>
+							<p:message for="nombreproducto" id="msgnombreP" display="icon" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Estado" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:selectOneMenu id="estado"
+								value="#{entProductosservicioBean.selected.estadoProducServ}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column />
+					</p:row>
+					<p:row>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Exporta" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+
+							<p:selectOneMenu id="exporta"
+								value="#{entProductosservicioBean.selected.exportacion}">
+								<f:selectItem itemValue="0" itemLabel="SI" />
+								<f:selectItem itemValue="1" itemLabel="No" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<br />
+						</p:column>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="País Exportación" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:selectOneMenu id="paisList" style="width:65%;"
+								value="#{entProductosservicioBean.selected.pais}">
+								<f:selectItem
+									itemLabel="#{entProductosservicioBean.selected.pais.nombrePais}" />
+								<f:selectItems value="#{entProductosservicioBean.listaPais()}"
+									var="p" itemLabel="#{p.nombrePais}" />
+
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:message for="paisList" id="msgPais" display="icon" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="CIIU *" />
+						</p:column>
+						<p:column style="font-weight: bold;" colspan="4">
+
+							<p:selectOneMenu id="ciiuList"
+								value="#{entProductosservicioBean.selected.entCiiu}">
+								<f:selectItem
+									itemLabel="#{entProductosservicioBean.selected.entCiiu.seccionCiiu} #{entProductosservicioBean.selected.entCiiu.clase} #{entProductosservicioBean.selected.entCiiu.descripcionCiiu}" />
+								<f:selectItems
+									value="#{entProductosservicioBean.listaEntCiiu()}" var="ci"
+									itemLabel="#{ci.seccionCiiu} #{ci.clase}-#{ci.descripcionCiiu}" />
+
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:message for="ciiuList" id="msgCiiu" display="icon" />
+						</p:column>
+					</p:row>
+
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="6">
+							update="formPalabras:dataTable, :growl" 
+								<p:commandButton icon="ui-icon-disk" title="Guardar Cambios"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm');"
+									action="#{entProductosservicioBean.editar()}" ajax="true" />
+
+							</p:column>
+						</p:row>
+					</f:facet>
+
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+
+
+
+
+				***************************************** VENTANA CREAR ***********************************************   
+
+	<p:dialog header="Crear Producto / Servicio" widgetVar="newDialog"
+		id="newDlg" showEffect="fade" hideEffect="explode" modal="true">
+		<h:form id="newForm">
+			<p:panel id="panelCrear">
+				<p:growl id="msgs" showDetail="true" />
+				<p:panelGrid style="margin-top:0px; width:100%; ">
+					<p:row>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Entidad" />
+						</p:column>
+						<p:column colspan="4" style="font-weight: bold;">
+							<h:outputLabel id="nombreentidad" disabled="true"
+								value="#{ps.entEntidad.nombreEntidad}" />
+						</p:column>
+						<p:column />
+					</p:row>
+					<p:row>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Nombre Producto" />
+						</p:column>
+						<p:column colspan="" style="font-weight: bold;">
+							<p:inputText id="nombreproducto" required="true"
+								style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								requiredMessage="Nombre Producto / Servicio es Obligatorio."
+								value="#{entProductosservicioBean.productosServicio.nombreProductoServicio}">
+								<p:ajax update="msgnombreP" event="keyup" onstart="true" />
+							</p:inputText>
+
+						</p:column>
+						<p:column>
+							<p:message for="nombreproducto" id="msgnombreP" display="icon" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Estado" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:selectOneMenu id="estado"
+								value="#{entProductosservicioBean.productosServicio.estadoProducServ}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column />
+					</p:row>
+					<p:row>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Exporta" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:selectOneMenu id="exporta"
+								value="#{entProductosservicioBean.productosServicio.exportacion}">
+								<f:selectItem itemValue="0" itemLabel="SI" />
+								<f:selectItem itemValue="1" itemLabel="NO" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<br />
+						</p:column>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="País Exportación" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:selectOneMenu id="paisList" required="true"
+								value="#{entProductosservicioBean.productosServicio.pais}"
+								requiredMessage="Campo País Obligatorio" label="País">
+								<f:selectItem itemLabel="Seleccione" />
+								<f:selectItems value="#{entProductosservicioBean.listaPais()}"
+									var="p" itemLabel="#{p.nombrePais}" />
+								<p:ajax update="msgPais" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:message for="paisList" id="msgPais" display="icon" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="CIIU *" />
+						</p:column>
+						<p:column style="font-weight: bold;" colspan="4">
+
+							<p:selectOneMenu id="ciiuList" label="Ciiu"
+								value="#{entProductosservicioBean.productosServicio.entCiiu}"
+								required="true" requiredMessage="Campo Ciiu Obligatorio">
+								<f:selectItem itemLabel="Seleccione" />
+								<f:selectItems
+									value="#{entProductosservicioBean.listaEntCiiu()}" var="ci"
+									itemLabel="#{ci.seccionCiiu} #{ci.clase}-#{ci.descripcionCiiu}" />
+								<p:ajax update="msgCiiu" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:message for="ciiuList" id="msgCiiu" display="icon" />
+						</p:column>
+					</p:row>
+
+
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="6">
+							
+							update=":formPalabras:dataTable,panelCrear, :growl" 
+								<p:commandButton
+									
+									title="Guardar" icon="ui-icon-disk"
+									onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{entProductosservicioBean.crear()}" ajax="true" />
+
+								<p:commandButton type="reset" icon="ui-icon-refresh"
+									title="Refrescar" update="newForm"></p:commandButton>
+							</p:column>
+						</p:row>
+					</f:facet>
+
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:growl id="growl" showDetail="true" life="5000" />
+
+
+	<script type="text/javascript">
+				function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+					dialog = jQuery('#' + dialogName);
+					if (args.validationFailed) {
+						dialog.effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						clearForm(formName);
+						newDialog.hide();
+						updateDialog.hide();
+					}
+				}
+				function clearForm(formName) {
+					jQuery('#' + formName).each(function() {
+						this.reset();
+					});
+				}
+			</script>
+
+</body>
+</html>

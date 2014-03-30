@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_proyectos.png"
+			title="Menú > Proyectos" style=" width:32px; heght:32px;" />
+		<p:outputLabel value="Proyectos" title="Menú > Proyectos" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="2">
+			<p:menuitem value="Inicio Proyectos"
+				url="${requestContextPath}/Proyectos/Proyectos.jsf"
+				title="Inicio Proyectos" />
+
+			<p:menuitem value="Nuevo" title="Nuevo"
+				url="${requestContextPath}/Proyectos/Nuevo/nuevoProyecto.jsf" />
+
+			<p:menuitem value="Formulación" title="Formulación"
+				style="font-weight: bold;"
+				url="${requestContextPath}/Proyectos/Formulacion/formulacion.jsf" />
+
+			<p:menuitem value="En Revisión" title="En Revisión"
+				url="${requestContextPath}/Proyectos/EnRevision/enRevision.jsf" />
+
+			<p:menuitem value="En Ejecución" title="En Ejecución"
+				url="${requestContextPath}/Proyectos/EnEjecucion/enEjecucion.jsf" />
+
+			<p:menuitem value="Finalizados" title="Finalizados"
+				url="${requestContextPath}/Proyectos/Finalizados/finalizados.jsf" />
+
+		</p:tabMenu>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="form">
+
+			<br />
+			<p:commandButton icon="ui-icon-search" id="buscar"
+				title="#{entidad['title.btn_Buscar']}"
+				style=" margin:0px 1px 0px 1px; float:right; "
+				oncomplete="searchDialog.show()">
+
+			</p:commandButton>
+
+			<br />
+
+			<p:dataTable id="dataTable" var="pro"
+				value="#{formulacionBean.listaProyectos}" rowIndexVar="rowIndex"
+				styleClass="DataTableStyle"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+				emptyMessage="No se han encontado resultados"
+				rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+				rowKey="#{pro.idProyecto}" selection="#{formulacionBean.selected}">
+
+				<f:facet name="header">
+					<h:outputLabel value="Proyectos en formulación" />
+				</f:facet>
+				<p:column headerText="N°" style="width:2%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="Proyecto">
+					<h:outputText value="#{pro.nombreProyecto}" />
+				</p:column>
+
+				<p:column headerText="Fecha Creación">
+					<h:outputText value="#{pro.fechaCreacion}" />
+				</p:column>
+
+				<p:column headerText="Fecha Inicio">
+					<h:outputText value="#{pro.fechaInicioFormulacion}" />
+				</p:column>
+
+
+				<p:column style="width:5%">
+
+					<p:commandButton id="viewButton"
+						action="inicioProyecto.xhtml?faces-redirect=true"
+						icon="ui-icon-clipboard" title="Ver Formulación del Proyecto"
+						style=" margin:0px 0px 0px 0px;">
+						<f:setPropertyActionListener target="#{formulacionBean.selected}"
+							value="#{pro}" />
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+	
+		</h:form>
+
+		<!-- INICIO catalogo buscar entidad -->
+
+		<p:dialog header="Buscar Proyecto en Formulación"
+			widgetVar="searchDialog" update="panel" resizable="false"
+			id="searchDlg" modal="true">
+
+
+			<h:form id="formSearch">
+				<br />
+				<p:panel id="panelDialog" style=" background:#F2F2F2;">
+
+					<p:panel id="panelBusqueda">
+						<p:panelGrid style="margin-top:0px; width:100%; ">
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Nombre Proyecto" />
+								</p:column>
+								<p:column colspan="3" style="font-weight: bold;">
+									<p:inputText id="nombreProy"
+										style="width:96%; text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+										value="#{formulacionBean.proyectoBuscar.nombreProyecto}" />
+								</p:column>
+
+
+								<p:column rowspan="3" style="font-weight: bold;">
+									<div align="right">
+										<p:commandButton icon="ui-icon-search" title="Buscar"
+											update=":form:dataTable" style=" margin:0px 5px 0px 0px;"
+											oncomplete="searchDialog.hide()"
+											actionListener="#{formulacionBean.listaFiltrar()}" />
+										<!-- 											actionListener="#{formulacionBean.listaFiltrar()}" /> -->
+
+
+										<p:commandButton icon="ui-icon-refresh" update="panelBusqueda"
+											title="Refrescar / Limpiar"
+											actionListener="#{formulacionBean.reset()}">
+											<p:resetInput target="formSearch" />
+										</p:commandButton>
+									</div>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Fecha de Creación o Formulación" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:calendar id="fechaInicial" showOn="button"
+										styleClass="input" pattern="yyyy-MM-dd"
+										value="#{formulacionBean.fechaInicial}" label="Fecha inicial">
+
+
+									</p:calendar>
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="hasta" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:calendar id="fechaFinal" showOn="button" styleClass="input"
+										pattern="yyyy-MM-dd" value="#{formulacionBean.fechaFinal}"
+										label="Fecha Final" />
+								</p:column>
+<!-- 								<p:column style="font-weight: bold;"> -->
+<!-- 									<p:selectOneMenu id="sede" value="#{formulacionBean.proyectoBuscar.sedeProyecto}" > -->
+<!-- 										<f:selectItem itemLabel="Seleccione" /> -->
+<!-- 										<f:selectItems value="#{formulacionBean.listaSedes()}" -->
+<!-- 											var="sed" itemLabel="#{sed.nombreSede}" /> -->
+
+<!-- 										<f:converter converterId="GenericConvertEntity" /> -->
+<!-- 									</p:selectOneMenu> -->
+									
+<!-- 								</p:column> -->
+								
+							</p:row>
+						</p:panelGrid>
+
+					</p:panel>
+				</p:panel>
+				<br />
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

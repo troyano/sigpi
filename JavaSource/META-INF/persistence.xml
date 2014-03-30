@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="Modulo_2">
+		<jta-data-source>java:/sigpiDS</jta-data-source>
+				<class>Modulo_3.unicom.dm.Entitys.ClasificacionColciencia</class>
+		<class>Modulo_3.unicom.dm.Entitys.GrupoClasificacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.GrupoInvestigacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.SemilleroInvestigacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.AreaInvestigacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.Convocatoria</class>
+		<class>Modulo_3.unicom.dm.Entitys.LineaInvestigacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.TipoPersonal</class>
+		<class>Modulo_3.unicom.dm.Entitys.TipoProyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptEspesificacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.Departamento</class>
+		<class>Modulo_3.unicom.dm.Entitys.FormacionAcademica</class>
+		<class>Modulo_3.unicom.dm.Entitys.Municipio</class>
+		<class>Modulo_3.unicom.dm.Entitys.Pais</class>
+		<class>Modulo_3.unicom.dm.Entitys.Programa</class>
+		<class>Modulo_3.unicom.dm.Entitys.Region</class>
+		<class>Modulo_3.unicom.dm.Entitys.Sede</class>
+		<class>Modulo_3.unicom.dm.Entitys.SedePrograma</class>
+		<class>Modulo_3.unicom.dm.Entitys.VinculoInstitucional</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntTipoIdentificacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.Descriptores</class>
+		
+		<class>Modulo_3.unicom.dm.Entitys.TipoVariableEvaluacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.Variable</class>
+		<class>Modulo_3.unicom.dm.Entitys.DisenioMetodo</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntCiiu</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntContacto</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntContribuyente</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntEntidad</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntIndicador</class>
+		
+		
+		<class>Modulo_3.unicom.dm.Entitys.EntProductosservicio</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntRepresentantelegal</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntRolentidad</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntSector</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntSituacionFinanciera</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntTamanoEntidad</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntTipoEmpresa</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntTipoEntidad</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntVariable</class>
+		<class>Modulo_3.unicom.dm.Entitys.EjecucionCronograma</class>
+		<class>Modulo_3.unicom.dm.Entitys.Anio</class>
+		<class>Modulo_3.unicom.dm.Entitys.Actividad</class>
+		<class>Modulo_3.unicom.dm.Entitys.AnexosGeneral</class>
+		<class>Modulo_3.unicom.dm.Entitys.AnexosImpacto</class>
+		<class>Modulo_3.unicom.dm.Entitys.AnexosResultado</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptCobertura</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptImpacto</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptResultadosAporte</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptTipoImpacto</class>
+		<class>Modulo_3.unicom.dm.Entitys.AptTipoResultado</class>
+		<class>Modulo_3.unicom.dm.Entitys.AreaDesempeno</class>
+		<class>Modulo_3.unicom.dm.Entitys.Cargo</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntidadPPresupuesto</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntidadProyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.Fase</class>
+		<class>Modulo_3.unicom.dm.Entitys.PalabraClave</class>
+		<class>Modulo_3.unicom.dm.Entitys.Personal</class>
+		<class>Modulo_3.unicom.dm.Entitys.PersonalEvaluacionProyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.PersonalProyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.PreEjecucionPresupuesto</class>
+		<class>Modulo_3.unicom.dm.Entitys.PreTipoContrato</class>
+		<class>Modulo_3.unicom.dm.Entitys.PreTipoPresupuesto</class>
+		<class>Modulo_3.unicom.dm.Entitys.Presupuesto</class>
+		<class>Modulo_3.unicom.dm.Entitys.Proyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.ProyectoAreaInvestigacion</class>
+		<class>Modulo_3.unicom.dm.Entitys.ProyectoConvocatoria</class>
+		<class>Modulo_3.unicom.dm.Entitys.ProyectoGrupo</class>
+		<class>Modulo_3.unicom.dm.Entitys.PuntajeRevisor</class>
+		<class>Modulo_3.unicom.dm.Entitys.ReferenciaBibliografica</class>
+		<class>Modulo_3.unicom.dm.Entitys.SedeProyecto</class>
+		<class>Modulo_3.unicom.dm.Entitys.SegRol</class>
+		<class>Modulo_3.unicom.dm.Entitys.SeguiResAporte</class>
+		<class>Modulo_3.unicom.dm.Entitys.TipoDisenioMetodo</class>
+		<class>Modulo_3.unicom.dm.Entitys.EntFinancieraAnio</class>
+	</persistence-unit>
+</persistence>

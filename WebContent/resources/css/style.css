@@ -1,0 +1,88 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	background-color: #070B19;
+	font-size: 56.3%;
+	font-family: inherit;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#layout {
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid;
+	border-color: #1E466F;
+}
+
+#header {
+	margin: 1% 1% 1% 1%;
+}
+
+#titlePage {
+	background-color: transparent;
+	margin: 10px 1% 10px 1%;
+	height: 25px;
+}
+
+#titlePage p {
+	font-family: sans-serif;
+	font-size: 120%;
+	font-weight: 600; 
+	
+}
+
+#separator {
+	height: 2px;
+	margin: 0% 1% 0% 1%;
+}
+
+#header_left {
+	float: left;
+	margin: 0% 0% 1% 0%;
+	vertical-align: middle;
+}
+
+#header_right {
+	float: right;
+	margin-top: -51px;
+	width: 155px;
+	background-color: inherit;
+}
+
+#header_center {
+	margin-top: 19px;
+
+	
+}
+
+#menu {
+	margin: 1% 1% 1% 1%;
+}
+
+#contenido {
+	margin: 1% 1% 1% 1%;
+	background-color: transparent;
+}
+
+#footer {
+	margin: 2% 1% 1% 1%;
+}
+
+.ui-button {
+	background: none;
+}
+
+.btnGuardar {
+	background-image:
+		url(${requestContextPath}/resources/img/32/btn_guardar.png)
+}
+
+.ui-dock-container-top {
+	position: absolute !important;
+	display: block;
+}
+
+.ui-widget-header .ui-dock-container-top{
+	border:auto;
+}

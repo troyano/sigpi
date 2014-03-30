@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones3.png"
+				title="Menú > Variables Institucionales" />
+			<p:outputLabel value="Variables Institucionales"
+				title="Menú > Variables Institucionales" />
+		</ui:define>
+		<ui:define name="menu">
+			<!-- 		<ui:include src="/Template/menuOpcionesInstitucionales.xhtml" /> -->
+			<p:tabMenu activeIndex="9">
+				<p:menuitem id="uno" value="Inicio Opciones institucionales"
+					title="Inicio Opciones institucionales"
+					url="${requestContextPath}/OpcionesInstitucionales/OpcionesInstitucionales.jsf" />
+				<p:menuitem id="dos" value="Formación Académica"
+					title="Formación Académica"
+					url="${requestContextPath}/OpcionesInstitucionales/FormacionAcademica.jsf" />
+				<p:menuitem id="tres" value="Vinculo Institucional"
+					title="Vinculo Institucional"
+					url="${requestContextPath}/OpcionesInstitucionales/VinculoInstitucional.jsf" />
+				<p:menuitem id="cuatro" value="Tipo Identificación"
+					title="Tipo Identificación"
+					url="${requestContextPath}/OpcionesInstitucionales/TipoIdentificacion.jsf" />
+				<p:menuitem id="cinco" value="Sede - Programa"
+					title="Sede - Programa"
+					url="${requestContextPath}/OpcionesInstitucionales/SedePrograma.jsf" />
+				<p:menuitem id="seis" value="Sede" title="Sede"
+					url="${requestContextPath}/OpcionesInstitucionales/Sede.jsf" />
+				<p:menuitem id="siete" value="Programa" title="Programa"
+					url="${requestContextPath}/OpcionesInstitucionales/Programa.jsf" />
+				<p:menuitem id="ocho" value="País" title="País"
+					url="${requestContextPath}/OpcionesInstitucionales/Pais.jsf" />
+				<p:menuitem id="nueve" value="Región" title="Región"
+					url="${requestContextPath}/OpcionesInstitucionales/Region.jsf" />
+				<p:menuitem id="dies" value="Departamento" title="Departamento"
+					style="font-weight: bold;"
+					url="${requestContextPath}/OpcionesInstitucionales/Departamento.jsf" />
+				<p:menuitem id="once" value="Municipio" title="Municipio"
+					url="${requestContextPath}/OpcionesInstitucionales/Municipio.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="dep"
+					value="#{departamentoBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{dep.idDepartamento}"
+					selection="#{departamentoBean.selected}" selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Departamento" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{dep.idDepartamento}">
+						<f:facet name="header">
+							<h:outputText value="Código" />
+						</f:facet>
+						<h:outputText value="#{dep.idDepartamento}" />
+					</p:column>
+
+					<p:column sortBy="#{dep.nombreDepartamento}">
+						<f:facet name="header">
+							<h:outputText value="Nombre Departamento" />
+						</f:facet>
+						<h:outputText value="#{dep.nombreDepartamento}" />
+					</p:column>
+
+					<p:column sortBy="#{dep.pais.nombrePais}">
+						<f:facet name="header">
+							<h:outputText value="País" />
+						</f:facet>
+						<h:outputText value="#{dep.pais.nombrePais}" />
+					</p:column>
+
+					<p:column sortBy="#{dep.region.nombreRegion}">
+						<f:facet name="header">
+							<h:outputText value="Región" />
+						</f:facet>
+						<h:outputText value="#{dep.region.nombreRegion}" />
+					</p:column>
+
+					<p:column sortBy="#{dep.estadoDepartamento}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="Activo"
+							rendered="#{dep.estadoDepartamento==0}" />
+						<h:outputText value="Inactivo"
+							rendered="#{dep.estadoDepartamento==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{departamentoBean.selected}" value="#{dep}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{departamentoBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle Departamento" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditar">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Código" />
+							<p:inputText id="codigo" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{departamentoBean.selected.idDepartamento}"
+								required="true" requiredMessage="Código es Obligatorio"
+								label="codigo">
+								<p:ajax update="msgCodigo" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="codigo" id="msgCodigo" display="icon" />
+
+							<h:outputLabel value="Nombre Deparatmento" />
+							<p:inputText id="nombreDep" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{departamentoBean.selected.nombreDepartamento}"
+								required="true"
+								requiredMessage="Nombre Departamento es Obligatorio"
+								label="Nombre Departamento">
+								<p:ajax update="msgnombreDep" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombreDep" id="msgnombreDep" display="icon" />
+
+							<h:outputLabel value="País" />
+							<p:selectOneMenu id="paisEdit"
+								value="#{departamentoBean.selected.pais}" required="true"
+								requiredMessage="Campo País Obligatorio" label="País">
+								<f:selectItem
+									itemLabel="#{departamentoBean.selected.pais.nombrePais}"
+									itemValue="#{departamentoBean.selected.pais.idPais}" />
+								<f:selectItems value="#{departamentoBean.listaPaises()}" var="p"
+									itemLabel="#{p.nombrePais}" />
+								<p:ajax update="msgPais" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<p:message for="paisEdit" id="msgPais" display="icon" />
+
+							<h:outputLabel value="Región" />
+							<p:selectOneMenu id="regionEdit"
+								value="#{departamentoBean.depart.region}" required="true"
+								requiredMessage="Región es Obligatorio" label="Región">
+								<f:selectItem
+									itemLabel="#{departamentoBean.selected.region.nombreRegion}"
+									itemValue="#{departamentoBean.selected.region.idRegion}" />
+								<f:selectItems value="#{departamentoBean.listaRegiones()}"
+									var="reg" itemLabel="#{reg.nombreRegion}" />
+								<p:ajax update="msgRegion" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<p:message for="regionEdit" id="msgRegion" display="icon" />
+
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{departamentoBean.selected.estadoDepartamento}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{departamentoBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Departamento" widgetVar="newDialog"
+				update="newForm" resizable="false" id="newDlg" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrear">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px;">
+
+
+							<h:outputLabel value="Código" />
+							<p:inputText id="codigo" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{departamentoBean.depart.idDepartamento}"
+								required="true" requiredMessage="Código es Obligatorio"
+								label="codigo">
+								<p:ajax update="msgCodigo" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="codigo" id="msgCodigo" display="icon" />
+
+							<h:outputLabel value="Nombre Deparatmento" />
+							<p:inputText id="nombreDep" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{departamentoBean.depart.nombreDepartamento}"
+								required="true"
+								requiredMessage="Nombre Departamento es Obligatorio"
+								label="Nombre Departamento">
+								<p:ajax update="msgnombreDep" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombreDep" id="msgnombreDep" display="icon" />
+
+							<h:outputLabel value="País" />
+							<p:selectOneMenu id="paisAdd"
+								value="#{departamentoBean.depart.pais}" required="true"
+								requiredMessage="País Obligatorio">
+								<f:selectItem itemLabel="Seleccione" itemValue="" />
+								<f:selectItems value="#{departamentoBean.listaPaises()}" var="p"
+									itemLabel="#{p.nombrePais}" />
+								<p:ajax update="msgPais" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+
+							</p:selectOneMenu>
+							<p:message for="paisAdd" id="msgPais" display="icon" />
+
+							<h:outputLabel value="Región" />
+							<p:selectOneMenu id="regionAdd"
+								value="#{departamentoBean.depart.region}" required="true"
+								requiredMessage="Región es Obligatorio">
+								<f:selectItem itemLabel="Seleccione" itemValue="" />
+								<f:selectItems value="#{departamentoBean.listaRegiones()}"
+									var="reg" itemLabel="#{reg.nombreRegion}" />
+								<p:ajax update="msgRegion" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+							<p:message for="regionAdd" id="msgRegion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{departamentoBean.depart.estadoDepartamento}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+							<br />
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable,panelCrear, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{departamentoBean.crear()}" ajax="true" />
+								<p:commandButton type="reset" update="newForm,panelCrear"
+									icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+
+
+</body>
+</html>

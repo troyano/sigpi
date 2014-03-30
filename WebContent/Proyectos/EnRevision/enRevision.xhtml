@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_proyectos.png"
+			title="Menú > Proyectos" style=" width:32px; heght:32px;" />
+		<p:outputLabel value="Proyectos" title="Menú > Proyectos" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="3">
+			<p:menuitem value="Inicio Proyectos"
+				url="${requestContextPath}/Proyectos/Proyectos.jsf"
+				title="Inicio Proyectos" />
+
+			<p:menuitem value="Nuevo" title="Nuevo"
+				url="${requestContextPath}/Proyectos/Nuevo/nuevoProyecto.jsf" />
+
+			<p:menuitem value="Formulación" title="Formulación"
+				url="${requestContextPath}/Proyectos/Formulacion/formulacion.jsf" />
+
+			<p:menuitem value="En Revisión" title="En Revisión"
+				style="font-weight: bold;"
+				url="${requestContextPath}/Proyectos/EnRevision/enRevision.jsf" />
+
+			<p:menuitem value="En Ejecución" title="En Ejecución"
+				url="${requestContextPath}/Proyectos/EnEjecucion/enEjecucion.jsf" />
+
+			<p:menuitem value="Finalizados" title="Finalizados"
+				url="${requestContextPath}/Proyectos/Finalizados/finalizados.jsf" />
+
+		</p:tabMenu>
+
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="form">
+
+			<br />
+
+			<p:commandButton oncomplete="newDialog.show()"
+				icon=" ui-icon-plusthick" title="Crear"
+				style=" margin:0px 1px 0px 1px; float:right; " />
+
+			<br />
+
+			<p:dataTable id="dataTable" var="fac"
+				value="#{formacionAcademicaBean.mostrarTodos()}"
+				rowIndexVar="rowIndex" styleClass="DataTableStyle"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+				emptyMessage="No se han encontado resultados"
+				rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+				rowKey="#{fac.idFormacionAcademica}"
+				selection="#{formacionAcademicaBean.selected}"
+				selectionMode="single">
+
+				<f:facet name="header">
+					<h:outputLabel value="Formación Académica" />
+				</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="N°" />
+					</f:facet>
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column sortBy="#{fac.descripcionFormacionAcademica}">
+					<f:facet name="header">
+						<h:outputText value="Descripción" />
+					</f:facet>
+					<h:outputText value="#{fac.descripcionFormacionAcademica}" />
+				</p:column>
+
+
+				<p:column sortBy="#{fac.estadoFormAcade}">
+					<f:facet name="header">
+						<h:outputText value="Estado" />
+					</f:facet>
+					<h:outputText value="Activo" rendered="#{fac.estadoFormAcade==0}" />
+					<h:outputText value="Inactivo" rendered="#{fac.estadoFormAcade==1}" />
+				</p:column>
+
+
+				<p:column style="width:2%">
+
+					<p:commandButton id="selectButton"
+						update=":updateDetailForm:display"
+						oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+						title="Editar">
+						<f:setPropertyActionListener
+							target="#{formacionAcademicaBean.selected}" value="#{fac}" />
+					</p:commandButton>
+					<p:commandButton
+						onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+						actionListener="#{formacionAcademicaBean.eliminareditar()}"
+						update="dataTable" icon="ui-icon-trash" title="Eliminar"
+						style=" margin:0px 0px 0px 5px;" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Detalle de Formación Académica"
+			widgetVar="updateDialog" id="updtaeDlg" resizable="false"
+			showEffect="fade" hideEffect="explode" modal="true">
+			<h:form id="updateDetailForm">
+
+				<p:panel id="panelEditar">
+					<p:messages id="msgs" autoUpdate="true" />
+
+					<p:panelGrid id="display" columns="3" cellpadding="4"
+						style="margin:0 auto;">
+
+
+						<h:outputLabel value="Descripción" />
+						<p:inputText id="descripcion" style="text-transform:uppercase;"
+							onkeyup="javascript:this.value=this.value.toUpperCase();"
+							value="#{formacionAcademicaBean.selected.descripcionFormacionAcademica}"
+							required="true" requiredMessage="Descripción es Obligatorio"
+							label="Descripción">
+							<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+						</p:inputText>
+						<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+						<h:outputText value="Estado " />
+						<p:selectOneMenu id="estado"
+							value="#{formacionAcademicaBean.selected.estadoFormAcade}">
+							<f:selectItem itemValue="0" itemLabel="Activo" />
+							<f:selectItem itemValue="1" itemLabel="Inactivo" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:commandButton update=":form:dataTable, :growl"
+								icon="ui-icon-disk"
+								oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+								actionListener="#{formacionAcademicaBean.editar()}" ajax="true" />
+						</f:facet>
+					</p:panelGrid>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
+
+		<p:dialog header="Crear Formación Académica" widgetVar="newDialog"
+			update="newForm" resizable="false" id="newDlg" showEffect="fade"
+			hideEffect="explode" modal="true">
+			<h:form id="newForm">
+
+				<p:panel id="panelCrear">
+					<p:messages id="msgs" autoUpdate="true" />
+
+					<p:panelGrid id="displayNew" columns="3"
+						style="margin:0 auto;border:0px;">
+
+
+						<h:outputLabel value="Descripción" />
+						<p:inputText id="descripcion" style="text-transform:uppercase;"
+							onkeyup="javascript:this.value=this.value.toUpperCase();"
+							value="#{formacionAcademicaBean.fAcademica.descripcionFormacionAcademica}"
+							required="true" requiredMessage="Descripción es Obligatorio"
+							label="Descripción">
+							<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+						</p:inputText>
+						<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+						<h:outputText value="Estado " />
+						<p:selectOneMenu id="estado"
+							value="#{formacionAcademicaBean.fAcademica.estadoFormAcade}">
+							<f:selectItem itemValue="0" itemLabel="Activo" />
+							<f:selectItem itemValue="1" itemLabel="Inactivo" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:commandButton update=":form:dataTable,panelCrear, :growl"
+								icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+								oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+								actionListener="#{formacionAcademicaBean.crear()}" ajax="true" />
+							<!--  process="@this newUserForm:listagrupos" -->
+							<p:commandButton type="reset" update="newForm,panelCrear"
+								icon="ui-icon-refresh"></p:commandButton>
+
+						</f:facet>
+					</p:panelGrid>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
+		<p:growl id="growl" showDetail="true" life="2000" />
+
+		<script type="text/javascript">
+				function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+					dialog = jQuery('#' + dialogName);
+					if (args.validationFailed) {
+						dialog.effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						clearForm(formName);
+						newDialog.hide();
+						updateDialog.hide();
+					}
+				}
+				function clearForm(formName) {
+					jQuery('#' + formName).each(function() {
+						this.reset();
+					});
+				}
+			</script>
+
+	</ui:define>
+</ui:composition>
+
+</html>

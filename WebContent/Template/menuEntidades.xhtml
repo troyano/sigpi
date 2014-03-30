@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:tabMenu activeIndex="0">
+	    <p:menuitem value="Inicio Entidades" url="${requestContextPath}/Entidades/Entidades.jsf" title="Inicio Entidades" />
+	    
+        <p:menuitem value="Generalidades" title="Generalidades"
+            url="${requestContextPath}/Entidades/Generalidades_entidad.jsf" />
+            
+        <p:menuitem value="Productos y Servicios" title="Productos y Servicios"
+            url="${requestContextPath}/Entidades/productos_servicios.jsf"/> 
+		
+		<p:menuitem value="Situción Financiera" title="Situción Financiera"
+			url="#" />
+			
+		<p:menuitem value="Rol Entidad" title="Rol Entidad"
+			url="${requestContextPath}/Entidades/Rol_entidad.jsf"/>
+			
+	</p:tabMenu>
+</ui:composition>
+</html>

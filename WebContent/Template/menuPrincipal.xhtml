@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link
+		href="${facesContext.externalContext.requestContextPath}/resources/css/style.css"
+		rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+	<ui:composition>
+
+
+			<p:dock position="top" maxWidth="30">
+				<p:menuitem value="Proyectos" style="display: block;"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_proyectos.png"
+					url="${requestContextPath}/Proyectos/Proyectos.jsf " />
+				<p:menuitem value="Gestión de Entidades"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_entidad1.png"
+					url="${requestContextPath}/Entidades/Entidades.jsf" />
+				<p:menuitem value="Consultas"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_consultas.png"
+					url="${requestContextPath}/index.jsf " />
+				<p:menuitem value="Variables Institucionales"
+					icon="${requestContextPath}/resources/img//menuPrincipal/btn_opciones3.png"
+					url="${requestContextPath}/OpcionesInstitucionales/OpcionesInstitucionales.jsf " />
+				<p:menuitem value="Variables de Proyectos"
+					icon="${requestContextPath}/resources/img//menuPrincipal/btn_opciones.png"
+					url="${requestContextPath}/Opciones/Opciones.jsf " />
+				<p:menuitem value="Variables de Entidades"
+					icon="${requestContextPath}/resources/img//menuPrincipal/btn_opciones2.png"
+					url="${requestContextPath}/OpcionesEntidades/OpcionesEntidades.jsf " />
+				<p:menuitem value="Revisores"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_revisor.png"
+					url="${requestContextPath}/Revisores/Revisores.jsf " />
+				<p:menuitem value="Gestión de Usuarios"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_gestionUsuarios.png"
+					url="${requestContextPath}/Usuario/Usuario.jsf " />
+				<p:menuitem value="Convocatoria"
+					icon="${requestContextPath}/resources/img/menuPrincipal/btn_convocatoria2.png"
+					url="${requestContextPath}/Convocatoria/Convocatorias.jsf " />
+			</p:dock>
+	
+	</ui:composition>
+</h:body>
+</html>

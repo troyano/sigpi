@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_revisor.png"
+				title="Menú > Revisores" />
+			<p:outputLabel value="Revisores" title="Menú > Revisores" />
+		</ui:define>
+		<ui:define name="menu">
+
+			<p:tabMenu activeIndex="2">
+				<p:menuitem id="cero" value="Inicio Revisores"
+					url="${requestContextPath}/Revisores/Revisores.jsf"
+					title="Inicio Revisores" />
+
+				<p:menuitem id="uno" value="Conf. Variables" title="Conf. Variables"
+					url="${requestContextPath}/Revisores/Variables.jsf" />
+
+				<p:menuitem id="dos" value="Conf. Descriptores"
+					title="Conf. Descriptores" style="font-weight: bold;"
+					url="${requestContextPath}/Revisores/Descriptores.jsf" />
+
+				<p:menuitem id="tres" value="Conf. Tipo Variables"
+					title="Conf. Tipo Variables"
+					url="${requestContextPath}/Revisores/TipoVariablesEvaluacion.jsf" />
+
+				<p:menuitem id="cuatro" value="Lista de Revisores"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="cinco" value="Asignación de Revisores"
+					title="Asignación de Revisores" url="#" />
+
+				<p:menuitem id="seis" value="Histórico Proyectos Revisados"
+					title="Lista de Revisores" url="#" />
+
+				<p:menuitem id="siete" value="Proyectos por Revisars"
+					title="Proyectos por Revisar" url="#" />
+
+			</p:tabMenu>
+		</ui:define>
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+				<br />
+				<p:dataTable id="dataTable" var="des"
+					value="#{descriptoresBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="userDataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{des.idDescriptores}"
+					selection="#{descriptoresBean.selected}" selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Descriptores de La Evaluación" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{des.variable.descripcionVariable}">
+						<f:facet name="header">
+							<h:outputText value="Variable" />
+						</f:facet>
+						<h:outputText value="#{des.variable.descripcionVariable}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{des.descripcionDescritores}" />
+					</p:column>
+
+					<p:column sortBy="#{des.puntajeDescriptor}">
+						<f:facet name="header">
+							<h:outputText value="Puntaje Máximo" />
+						</f:facet>
+						<h:outputText value="#{des.puntajeDescriptor}" />
+					</p:column>
+
+					<p:column sortBy="#{des.estadoDescriptor}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="Activo" rendered="#{des.estadoDescriptor==0}">
+						</h:outputText>
+						<h:outputText value="Inactivo"
+							rendered="#{des.estadoDescriptor==1}" />
+					</p:column>
+
+					<p:column style="width:1%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{descriptoresBean.selected}" value="#{des}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if  (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							ActionListener="#{descriptoresBean.eliminareditar()}"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:dialog header="Detalle Descriptor de Evaluación"
+				widgetVar="updateDialog" id="updateDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelCrear">
+						<p:messages id="msgs" autoUpdate="true" />
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+							<h:outputText value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{descriptoresBean.selected.descripcionDescritores}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Puntaje Máximo" />
+							<p:inputText id="puntaje" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{descriptoresBean.selected.puntajeDescriptor}"
+								required="true" requiredMessage="Puntaje Máximo es Obligatorio"
+								label="Puntaje Máximo">
+								<p:ajax update="msgPuntaje" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="puntaje" id="msgPuntaje" display="icon" />
+
+							<h:outputText value="Fecha Cambio de estado" />
+							<p:calendar id="fechaCreacion" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{descriptoresBean.selected.fechaEstado}">
+
+							</p:calendar>
+							<br />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{descriptoresBean.selected.estadoDescriptor}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+							<br />
+
+							<h:outputText value="Variable de Evaluación" />
+							<p:selectOneMenu id="variableEdit"
+								value="#{descriptoresBean.selected.variable}"
+								label="Área de Investigación" required="true"
+								requiredMessage="Campo Variable de Evaluación obligatoria">
+								<f:selectItem
+									itemLabel="#{descriptoresBean.selected.variable.descripcionVariable}"
+									itemValue="#{descriptoresBean.selected.variable}" />
+								<f:selectItems value="#{descriptoresBean.mostrarVariables()}"
+									var="variables" itemLabel="#{variables.descripcionVariable}" />
+								<p:ajax update="msgVariableEdit" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+							<p:message for="variableEdit" id="msgVariableEdit" display="icon" />
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','updateDetailForm'); "
+									actionListener="#{descriptoresBean.editar()}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Descriptor" widgetVar="newDialog"
+				update="newForm,panelCrear" resizable="false" id="newDlg"
+				modal="true">
+				<h:form id="newForm">
+					<p:panel id="panelCrear">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3" style="margin:0 auto;">
+
+							<h:outputText value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{descriptoresBean.descriptores.descripcionDescritores}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Puntaje Máximo" />
+							<p:inputText id="puntaje" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{descriptoresBean.descriptores.puntajeDescriptor}"
+								required="true" requiredMessage="Puntaje Máximo es Obligatorio"
+								label="Puntaje Máximo">
+								<p:ajax update="msgPuntaje" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="puntaje" id="msgPuntaje" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{descriptoresBean.descriptores.estadoDescriptor}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+							<br />
+
+							<h:outputText value="Variable de Evaluación" />
+							<p:selectOneMenu id="variableAdd"
+								value="#{descriptoresBean.descriptores.variable}"
+								label="Variable de Evaluación" required="true"
+								requiredMessage="Campo Variable de Evaluación obligatoria">
+								<f:selectItem itemLabel="Seleccione" itemValue="" />
+								<f:selectItems value="#{descriptoresBean.mostrarVariables()}"
+									var="variables" itemLabel="#{variables.descripcionVariable}" />
+								<p:ajax update="msgVariableAdd" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+							<p:message for="variableAdd" id="msgVariableAdd" display="icon" />
+
+							<f:facet name="footer">
+								<p:commandButton icon="ui-icon-disk"
+									update=":form:dataTable,panelCrear"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{descriptoresBean.crear()}" ajax="true" />
+
+								<p:commandButton type="reset" icon=".ui-icon-refresh"
+									update="newForm"></p:commandButton>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

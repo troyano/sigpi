@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link
+		href="${facesContext.externalContext.requestContextPath}/resources/css/style.css"
+		rel="stylesheet" type="text/css" />
+	<title><ui:insert name="title">
+			<ui:include src="/Template/title.xhtml" />
+		</ui:insert></title>
+</h:head>
+<h:body>
+	<div id="layout">
+		<div id="header">
+			<p:panel styleClass="ui-widget-header ui-corner-all"
+				style="height: 100px;">
+				<div id="header_left">
+					<ui:insert name="header_left">
+						<ui:include src="/Template/header_left.xhtml" />
+					</ui:insert>
+				</div>
+				<div id="header_center">
+					<ui:insert name="header_center">
+						<ui:include src="/Template/menuPrincipal.xhtml" />
+					</ui:insert>
+				</div>
+				<div id="header_right">
+					<ui:insert name="header_right">
+						<ui:include src="/Template/header_right.xhtml" />
+					</ui:insert>
+				</div>
+			</p:panel>
+		</div>
+
+		<div id="titlePage">
+			<p>
+				<ui:insert name="titleMenu" />
+			</p>
+
+			</div>
+		<div id="separator">
+
+			<p:separator />
+
+		</div>
+		<div id="menu">
+			<ui:insert name="menu">
+
+			</ui:insert>
+			<ui:insert name="proyecto">
+
+			</ui:insert>
+
+		</div>
+		<div id="contenido">
+			<p:panel>
+				<ui:insert name="contenido">
+					<ui:include src="/Template/content.xhtml" />
+				</ui:insert>
+			</p:panel>
+		</div>
+		<div id="footer">
+			<ui:insert name="footer">
+				<ui:include src="/Template/footer.xhtml" />
+			</ui:insert>
+
+		</div>
+	</div>
+</h:body>
+</html>

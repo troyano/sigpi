@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:form id="form"
+			style="font-family:sans-serif; font-size: 120%; font-weight: 600; ">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_proyectos.png"
+				title="Menú > Proyectos" style=" width:32px; heght:32px;" />
+			<p:outputLabel value="Proyectos > "
+				title="Menú > Proyectos > Formulación" />
+			<p:commandLink id="formulacion"
+				action="formulacion.jsf?faces-redirect=true">
+				<p:outputLabel value="FORMULACIÓN"
+					style="font-weight: 700; color:#000; font-size:10px; cursor: pointer;"
+					title="Regresar a Formulación" />
+			</p:commandLink>
+		</h:form>
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="1">
+			<p:menuitem value="Inicio Proyectos"
+				url="${requestContextPath}/Proyectos/Formulacion/inicioProyecto.jsf"
+				title="Inicio Proyectos" />
+
+			<p:menuitem value="Entidades" title="Entidades"
+				style="font-weight: bold;"
+				url="${requestContextPath}/Proyectos/Formulacion/entidad/rolEntidadesProyecto.jsf" />
+
+			<p:menuitem value="Detalles" title="Detalles"
+				url="${requestContextPath}/Proyectos/Formulacion/detalle/inicioDetalles.jsf" />
+
+			<p:menuitem value="Personal" title="Personal" url="#" />
+
+			<p:menuitem value="Presupuesto" title="Presupuesto" url="#" />
+
+			<p:menuitem value="Aportes" title="Aportes" url="#" />
+
+			<p:menuitem value="Enviar a Convocatoria"
+				title="Enviar a Convocatoria" url="#" />
+
+		</p:tabMenu>
+
+	</ui:define>
+	<ui:define name="proyecto">
+		<p:panelGrid style="margin-top:2px; width:100%; ">
+			<p:row>
+				<p:column colspan="6"
+					style="font-weight: bold; text-align:left; background:#5A7DA7; color:#fff; ">
+					<p:outputLabel
+						value="Proyecto > #{formulacionBean.selected.nombreProyecto}"
+						style="font-weight: bold; margin:4px;" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formEntidad">
+			<p:panel id="paneldataTable"
+				style="margin-top:5px;background:#F2F2F2;">
+
+				<p:commandButton id="crear" oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 5px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="enp"
+					value="#{formulacionBean.mostrarEntidadesProyecto()}"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+					rowKey="#{enp.idEntidadProyecto}"
+					selection="#{formulacionBean.selectedEntidadProyecto}"
+					selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputText
+							value="Rol Entidades del Proyecto #{formulacionBean.selected.nombreProyecto}" />
+					</f:facet>
+
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column style="width:2%">
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Proyecto" />
+						</f:facet>
+						<h:outputText value="#{enp.proyecto.nombreProyecto}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Entidad" />
+						</f:facet>
+						<h:outputText value="#{enp.entEntidad.nombreEntidad}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Rol de la Entidad" />
+						</f:facet>
+						<h:outputText value="#{enp.entRolentidad.descripcionRolentidad}" />
+					</p:column>
+
+					<p:column style="width:2%">
+						<p:commandButton id="selectButton" update=":updateDetailForm"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{formulacionBean.selectedEntidadProyecto}"
+								value="#{enp}" />
+						</p:commandButton>
+
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{formulacionBean.eliminarEntidadProyecto()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+		<!-- ***************************************** VENTANA EDITAR ***********************************************   -->
+
+
+
+		<p:dialog header="Detalle Rol entidad del Proyecto"
+			widgetVar="updateDialog" id="updtaeDlg" resizable="false"
+			showEffect="fade" hideEffect="explode" modal="true">
+			<h:form id="updateDetailForm">
+				<p:panel id="panelEditar">
+					<p:growl id="msgs" showDetail="true" />
+					<p:panelGrid style="margin-top:0px; width:100%; ">
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Proyecto" />
+							</p:column>
+							<p:column colspan="4" style="font-weight: bold;">
+								<h:outputLabel id="nombreentidad" disabled="true"
+									value="#{formulacionBean.selected.nombreProyecto}" />
+							</p:column>
+
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Entidades" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="entidadesEdit" required="true"
+									value="#{formulacionBean.selectedEntidadProyecto.entEntidad}"
+									requiredMessage="Se debe seleccionar una entidad."
+									label="Entidades">
+									<f:selectItem
+										itemLabel="#{formulacionBean.selectedEntidadProyecto.entEntidad.nombreEntidad}"
+										itemValue="#{formulacionBean.selectedEntidadProyecto.entEntidad}" />
+									<f:selectItems value="#{formulacionBean.listaEntidades()}"
+										var="ent" itemLabel="#{ent.nombreEntidad}" />
+
+									<p:ajax update="rolesEdit" event="change"
+										process="entidadesEdit"
+										listener="#{formulacionBean.listaRolesChangeEdit()}" />
+									<f:converter converterId="GenericConvertEntity" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<p:message for="entidadesEdit" id="msgEntidadesEdit"
+									display="icon" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Roles" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="rolesEdit" required="true"
+									value="#{formulacionBean.selectedEntidadProyecto.entRolentidad}"
+									requiredMessage="Se debe seleccionar un rol." label="Roles">
+									<f:selectItem
+										itemLabel="#{formulacionBean.selectedEntidadProyecto.entRolentidad.descripcionRolentidad}"
+										itemValue="#{formulacionBean.selectedEntidadProyecto.entRolentidad}" />
+									<f:selectItems value="#{formulacionBean.listaEntRolentidad}"
+										var="rol" itemLabel="#{rol.descripcionRolentidad}" />
+									<p:ajax update="msgRolesEdit" event="keyup" onstart="true" />
+									<f:converter converterId="GenericConvertEntity" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<p:message for="rolesEdit" id="msgRolesEdit" display="icon" />
+							</p:column>
+						</p:row>
+
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="6">
+									<p:commandButton update=":formEntidad:dataTable, :growl"
+										icon="ui-icon-disk" title="Guardar Cambios"
+										oncomplete=" handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm');"
+										action="#{formulacionBean.editarEntidadProyecto()}"
+										ajax="true" />
+
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:panelGrid>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
+		<!-- 			***************************************** VENTANA CREAR ***********************************************   -->
+
+		<p:dialog header="Asignar Rol entidad al Proyecto"
+			widgetVar="newDialog" id="newDlg" showEffect="fade"
+			hideEffect="explode" modal="true">
+			<h:form id="newForm">
+				<p:panel id="panelCrear">
+					<p:growl id="msgs" showDetail="true" />
+					<p:panelGrid style="margin-top:0px; width:100%; ">
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Proyecto" />
+							</p:column>
+							<p:column colspan="4" style="font-weight: bold;">
+								<h:outputLabel id="nombreentidad" disabled="true"
+									value="#{formulacionBean.selected.nombreProyecto}" />
+							</p:column>
+
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Entidades" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="entidadesAdd" required="true"
+									value="#{formulacionBean.entidad}"
+									requiredMessage="Se debe seleccionar una entidad."
+									label="Entidades">
+									<f:selectItem itemLabel="Seleccione" />
+									<f:selectItems value="#{formulacionBean.listaEntidades()}"
+										var="ent" itemLabel="#{ent.nombreEntidad}" />
+
+									<p:ajax update="rolesAdd" event="change" process="entidadesAdd"
+										listener="#{formulacionBean.listaRolesChange()}" />
+									<f:converter converterId="GenericConvertEntity" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<p:message for="entidadesAdd" id="msgEntidadesAdd"
+									display="icon" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<p:outputLabel value="Roles" />
+							</p:column>
+							<p:column style="font-weight: bold;">
+								<p:selectOneMenu id="rolesAdd" required="true"
+									value="#{formulacionBean.entidadProyecto.entRolentidad}"
+									requiredMessage="Se debe seleccionar un rol." label="Roles">
+									<f:selectItem itemLabel="Seleccione" />
+									<f:selectItems value="#{formulacionBean.listaEntRolentidad}"
+										var="rol" itemLabel="#{rol.descripcionRolentidad}" />
+									<p:ajax update="msgRolesAdd" event="keyup" onstart="true" />
+									<f:converter converterId="GenericConvertEntity" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<p:message for="rolesAdd" id="msgRolesAdd" display="icon" />
+							</p:column>
+						</p:row>
+
+
+
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="6">
+									<p:commandButton
+										update=":formEntidad:dataTable,panelCrear, :growl"
+										title="Guardar" icon="ui-icon-disk"
+										onkeyup="clearForm(newForm)"
+										oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+										action="#{formulacionBean.crearEntidadProyecto()}" ajax="true" />
+
+									<p:commandButton type="reset" icon="ui-icon-refresh"
+										title="Refrescar" update="newForm"></p:commandButton>
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:panelGrid>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+		<p:growl id="growl" showDetail="true" life="5000" />
+
+
+		<script type="text/javascript">
+				function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+					dialog = jQuery('#' + dialogName);
+					if (args.validationFailed) {
+						dialog.effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						clearForm(formName);
+						newDialog.hide();
+						updateDialog.hide();
+					}
+				}
+				function clearForm(formName) {
+					jQuery('#' + formName).each(function() {
+						this.reset();
+					});
+				}
+			</script>
+	</ui:define>
+</ui:composition>
+
+</html>

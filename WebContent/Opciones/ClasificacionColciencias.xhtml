@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones.png"
+				title="Menú > Variables de Proyecto" />
+			<p:outputLabel value="Variables de Proyecto"
+				title="Menú > Variables de Proyecto" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="3">
+				<p:menuitem id="cero" value="Inicio Opciones"
+					url="${requestContextPath}/Opciones/Opciones.jsf"
+					title="Inicio Opciones" />
+
+				<p:menuitem id="uno" value="Área de Investigacion"
+					title="Área de Investigacion" url="/Opciones/AreaInvestigacion.jsf" />
+
+				<p:menuitem id="dos" value="Línea de Investigación"
+					title="Línea de Investigación"
+					url="${requestContextPath}/Opciones/LineaInvestigacion.jsf" />
+
+				<p:menuitem id="tres" value="Clasificación Colciencias"
+					title="Clasificación colciencias" style="font-weight: bold;"
+					url="${requestContextPath}/Opciones/ClasificacionColciencias.jsf" />
+
+				<p:menuitem id="cuatro" value="Grupos de Investigación"
+					title="Grupos de Investigación"
+					url="${requestContextPath}/Opciones/GrupoInvestigacion.jsf" />
+
+				<p:menuitem id="cinco" value="Semillero de Investigación"
+					title="Semillero de Investigación"
+					url="${requestContextPath}/Opciones/SemilleroInvestigacion.jsf" />
+
+				<p:menuitem id="seis" value="Tipo Proyecto" title=" Tipo Proyecto"
+					url="${requestContextPath}/Opciones/TipoProyecto.jsf" />
+
+				<p:menuitem id="siete" value="Rol Investigador"
+					title="Rol Investigador"
+					url="${requestContextPath}/Opciones/TipoPersonal.jsf" />
+
+				<p:menuitem id="ocho" value="Resultados" title="Resultados"
+					url="${requestContextPath}/Opciones/AptEspesificacion.jsf" />
+
+
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+
+			<h:form id="form">
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="cla"
+					value="#{clasificacionColcienciaBean.mostrarTodos()}"
+					rowIndexVar="rowIndex" styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{cla.idClasificacionColciencias}"
+					selection="#{clasificacionColcienciaBean.selected}"
+					selectionMode="single">
+					<f:facet name="header">
+						<h:outputLabel value="Clasificación Colciencias" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Detalle Clasificación" />
+						</f:facet>
+						<h:outputText value="#{cla.clasificacion}" />
+
+					</p:column>
+
+					<p:column sortBy="#{cla.estadoClasificacionCol}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO"
+							rendered="#{cla.estadoClasificacionCol==0}" />
+						<h:outputText value="INACTIVO"
+							rendered="#{cla.estadoClasificacionCol==1}" />
+					</p:column>
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{clasificacionColcienciaBean.selected}" value="#{cla}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{clasificacionColcienciaBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:dialog header="Detalle de la Clasificación"
+				widgetVar="updateDialog" id="updateDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelEditarClasificacion">
+						<p:messages id="msgs" autoUpdate="true" />
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+							<h:outputText value="Detalle Clasificación" />
+							<p:inputText id="detalle" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{clasificacionColcienciaBean.selected.clasificacion}"
+								required="true" requiredMessage="Detalle es Obligatorio"
+								label="Detalle">
+								<p:ajax update="msgdetalle" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="detalle" id="msgdetalle" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{clasificacionColcienciaBean.selected.estadoClasificacionCol}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk" title="Guardar"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{clasificacionColcienciaBean.editar()}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear una nueva Clasificación"
+				widgetVar="newDialog" update="newForm,panelCrearClasificacion"
+				resizable="false" id="newDlg">
+				<h:form id="newForm">
+					<p:panel id="panelCrearClasificacion">
+
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3" style="margin:0 auto;">
+
+							<h:outputText value="Detalle Clasificación" />
+							<p:inputText id="detalle"
+							style="text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{clasificacionColcienciaBean.clasificacion.clasificacion}"
+								required="true" requiredMessage="detalle es Obligatorio"
+								label="Detalle">
+								<p:ajax update="msgdetalle" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="detalle" id="msgdetalle" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{clasificacionColcienciaBean.clasificacion.estadoClasificacionCol}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+							<f:facet name="footer">
+								<p:commandButton
+									update=":form:dataTable,panelCrearClasificacion, :growl"
+									icon="ui-icon-disk"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{clasificacionColcienciaBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset" update="newForm"
+									icon="ui-icon-refresh"></p:commandButton>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

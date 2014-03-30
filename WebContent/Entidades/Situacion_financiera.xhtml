@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+
+<body>
+
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_entidad1.png"
+				title="Menú > Gestión de Entidades" />
+			<p:outputLabel value="Gestión de Entidades"
+				title="Menú > Gestión de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="4">
+				<p:menuitem value="Inicio Entidades"
+					url="${requestContextPath}/Entidades/Entidades.jsf"
+					title="Inicio Entidades" />
+
+				<p:menuitem value="Generalidades" title="Generalidades"
+					url="${requestContextPath}/Entidades/Generalidades_entidad.jsf" />
+
+				<p:menuitem value="Productos y Servicios"
+					title="Productos y Servicios"
+					url="${requestContextPath}/Entidades/productos_servicios.jsf" />
+
+				<p:menuitem value="Situción Financiera" title="Situción Financiera"
+					style="font-weight: bold;"
+					url="${requestContextPath}/Entidades/Situacion_financiera.jsf" />
+
+			</p:tabMenu>
+		</ui:define>
+
+
+
+		<ui:define name="contenido">
+			<h:form id="formEntidad">
+				<p:panel id="panelps" header="Situación Financiera"
+					style="background:#F2F2F2; text-align:center; ">
+
+					<p:panelGrid style="margin-top:0px; width:100%; ">
+						<p:row>
+							<p:column
+								style="font-weight: bold;width: 35%;border-color:#fff; ">
+
+							</p:column>
+							<p:column
+								style="font-weight: bold; width: 5% ; border-color:#fff;">
+								<p:outputLabel value="Entidad" />
+							</p:column>
+							<p:column style="font-weight: bold; width:15%;border-color:#fff;">
+								<p:selectOneMenu id="entidadList" style="width:250px;"
+									value="#{entSituacionFinancieraBean.entidad}" label="Entidad">
+									<f:selectItem itemLabel="Seleccione" />
+									<f:selectItems
+										value="#{entSituacionFinancieraBean.listaEntEntidad()}"
+										var="ent" itemLabel="#{ent.nombreEntidad}" />
+									<f:converter converterId="GenericConvertEntity" />
+
+									<p:ajax update="dataTable,entidadList,paneldataTable, :newForm"
+										event="change" process="dataTable,entidadList"
+										listener="#{entSituacionFinancieraBean.listaChange()}" />
+
+								</p:selectOneMenu>
+
+							</p:column>
+							<p:column
+								style="font-weight: bold;width: 35%;border-color:#fff; ">
+
+							</p:column>
+						</p:row>
+						<br />
+					</p:panelGrid>
+				</p:panel>
+				<p:panel id="paneldataTable"
+					style="margin-top:5px;background:#F2F2F2;">
+
+					<p:commandButton id="crear" oncomplete="newDialog.show()"
+						rendered="#{entSituacionFinancieraBean.estadoCrear and entSituacionFinancieraBean.aniosProgramados == 3}"
+						icon=" ui-icon-plusthick" title="Crear"
+						style=" margin:0px 1px 0px 1px; float:right; " />
+					<p:tooltip for="aniosProgramados"
+						value="Contacte con el administrador. Se deben programar 3 años para los valores de Indicadores." />
+					<p:button icon="ui-icon-info" id="aniosProgramados" readonly="true"
+						onclick="return false;"
+						style=" margin:0px 1px 0px 1px; float:right; "
+						rendered="#{entSituacionFinancieraBean.estadoCrear and entSituacionFinancieraBean.aniosProgramados != 3}" />
+
+					<br />
+
+					<p:dataTable id="dataTable" var="sf"
+						value="#{entSituacionFinancieraBean.listaEntSituacionFinaciera}"
+						rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+						emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+						rowKey="#{sf.idEntidadVariable}"
+						selection="#{entSituacionFinancieraBean.selected}">
+
+						<p:column selectionMode="single" style="width:2%" />
+
+						<p:column headerText="N°" style="width:2%; text-align:center;">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="Variable Financiera">
+							<h:outputText
+								value="#{sf.entIndicador.entVariable.descripcionVariable}" />
+						</p:column>
+
+						<p:column headerText="Indicador">
+							<h:outputText value="#{sf.entIndicador.descripcionIndicador}" />
+						</p:column>
+						<p:column headerText="Valores por Años"
+							style="width:2%; text-align:center;">
+							<p:commandButton id="viewButton" update=":viewDetailForm"
+								oncomplete="viewDialog.show()" icon="ui-icon-clipboard"
+								title="Ver Más" style=" margin:0px 0px 0px 0px;">
+								<f:setPropertyActionListener
+									target="#{entSituacionFinancieraBean.selected}" value="#{sf}" />
+							</p:commandButton>
+							<p:commandButton id="selectButtonD" update=":updateDDetailForm"
+								oncomplete="updateDDialog.show()" icon="ui-icon-pencil"
+								title="Editar/Actualizar" style=" margin:0px 0px 0px 5px;">
+								<f:setPropertyActionListener
+									target="#{entSituacionFinancieraBean.selected}" value="#{sf}" />
+							</p:commandButton>
+
+						</p:column>
+
+						<p:column style="width:2%">
+							<p:commandButton id="selectButton" update=":updateDetailForm"
+								oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+								title="Editar">
+								<f:setPropertyActionListener
+									target="#{entSituacionFinancieraBean.selected}" value="#{sf}" />
+							</p:commandButton>
+
+							<p:commandButton
+								onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+								actionListener="#{entSituacionFinancieraBean.eliminareditar()}"
+								update="dataTable" icon="ui-icon-trash" title="Eliminar"
+								style=" margin:0px 0px 0px 5px;" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:form>
+			<!-- 			***************************************** VENTANA VER MÁS ***********************************************   -->
+			<p:dialog
+				header="Detalle de los valores Anuales"
+				widgetVar="viewDialog" id="viewDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="viewDetailForm">
+					<p:panel id="panelVer">
+						<p:dataTable id="dataTableFinAnio" var="fa"
+							value="#{entSituacionFinancieraBean.listaFinancieraAnioPorRowSelected()}"
+							rowIndexVar="rowIndexFA" lazy="true"
+							emptyMessage="No se han encontrado resultados con los parametros de búsqueda.">
+
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column colspan="3" style="font-weight: bold"
+										headerText="#{entSituacionFinancieraBean.entidad.nombreEntidad}" />
+
+								</p:row>
+								<p:row>
+									<p:column colspan="3"
+										headerText="VARIABLE - #{entSituacionFinancieraBean.selected.entIndicador.entVariable.descripcionVariable}" />
+
+								</p:row>
+								<p:row>
+									<p:column headerText="Indicador" />
+									<p:column headerText="Año" />
+									<p:column headerText="Valor" />
+								</p:row>
+							</p:columnGroup>
+							<p:column>
+								<p:outputLabel
+									value="#{fa.entSituacionFinanciera.entIndicador.descripcionIndicador}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{fa.anio.anio}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{fa.valor}" />
+							</p:column>
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="9">
+										<p:commandButton icon="ui-icon-cancel" title="Cerrar"
+											style=" margin:0px 0px 0px 0px;" onclick="viewDialog.hide()" />
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<!-- 			***************************************** VENTANA EDITAR Indicadores ***********************************************   -->
+
+
+
+			<p:dialog header="Detalle Indicadores Situación financiera"
+				widgetVar="updateDialog" id="updateDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelEditarIndicador">
+						<p:growl id="msgs" showDetail="true" />
+						<p:panelGrid style="margin-top:0px; width:100%; ">
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Entidad" />
+								</p:column>
+								<p:column colspan="2" style="font-weight: bold;">
+									<p:outputLabel id="nombreentidad"
+										value="#{entSituacionFinancieraBean.entidad.nombreEntidad}" />
+
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Variable" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+
+									<p:selectOneMenu id="variableEdit" label="Variable"
+										value="#{entSituacionFinancieraBean.selected.entIndicador.entVariable}"
+										required="true" requiredMessage="Campo Variable Obligatorio">
+										<f:selectItem
+											itemLabel="#{entSituacionFinancieraBean.selected.entIndicador.entVariable.descripcionVariable}" />
+										<f:selectItems
+											value="#{entSituacionFinancieraBean.listaVariables()}"
+											var="va" itemLabel="#{va.descripcionVariable}" />
+
+										<p:ajax update="indicadorEdit" event="change"
+											process="variableEdit"
+											listener="#{entSituacionFinancieraBean.listaVariableChangeEdit()}" />
+										<f:converter converterId="GenericConvertEntity" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:message for="variableEdit" id="msgVariableEdit"
+										display="icon" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Indicador" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+
+									<p:selectOneMenu id="indicadorEdit" label="Indicador"
+										value="#{entSituacionFinancieraBean.selected.entIndicador}"
+										required="true" requiredMessage="Campo Indicador Obligatorio">
+										<f:selectItem
+											itemLabel="#{entSituacionFinancieraBean.selected.entIndicador.descripcionIndicador}" />
+										<f:selectItems
+											value="#{entSituacionFinancieraBean.listaIndicadores()}"
+											var="ind" itemLabel="#{ind.descripcionIndicador}" />
+										<p:ajax update="msgIndicadorEdit" event="keyup" onstart="true" />
+										<f:converter converterId="GenericConvertEntity" />
+									</p:selectOneMenu>
+
+								</p:column>
+								<p:column>
+									<p:message for="indicadorEdit" id="msgIndicadorEdit"
+										display="icon" />
+
+								</p:column>
+							</p:row>
+
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="3">
+
+										<p:commandButton update=":formEntidad:dataTable, :growl"
+											icon="ui-icon-disk" title="Guardar Cambios"
+											oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','updateDetailForm'); "
+											actionListener="#{entSituacionFinancieraBean.editar()}" />
+
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			<!-- 			***************************************** VENTANA EDITAR Valores Anuales ***********************************************   -->
+
+
+
+			<p:dialog header="Detalle Situación Financiera - Valores Anuales"
+				widgetVar="updateDDialog" id="updateDDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDDetailForm">
+
+					<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+
+
+					<p:dataTable id="financieraAnios" var="edSf" style="width:300px;"
+						rowIndexVar="rowIndex" rowKey="#{edSf.idFinancieraAnio}"
+						lazy="true"
+						value="#{entSituacionFinancieraBean.listaFinancieraAnioPorRowSelected()}"
+						editable="true" widgetVar="sfTable" selectionMode="single"
+						selection="#{entSituacionFinancieraBean.selectedFAedit}">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{entSituacionFinancieraBean.entidad.nombreEntidad}" /><br />
+							<p:outputLabel value="#{entSituacionFinancieraBean.selected.entIndicador.entVariable.descripcionVariable} - #{entSituacionFinancieraBean.selected.entIndicador.descripcionIndicador}" />
+							
+						</f:facet>
+
+						<p:column headerText="N°" style="width:2%; text-align:center;">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:ajax event="rowEdit" update="@this"
+							listener="#{entSituacionFinancieraBean.onEdit}" />
+
+						<p:ajax event="rowEditCancel" update="@this"
+							listener="#{entSituacionFinancieraBean.onCancel}" />
+
+						<p:column headerText="Año" style="width:30%">
+							<p:outputLabel value="#{edSf.anio.anio}" />
+						</p:column>
+
+						<p:column headerText="Valor" style="width:30%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{edSf.valor}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{entSituacionFinancieraBean.valorEditar}"
+										style="width:80%" label="Valor" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:2%">
+							<p:rowEditor />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="5">
+
+									<p:commandButton icon="ui-icon-cancel" title="Cerrar"
+										style=" margin:0px 0px 0px 0px;"
+										onclick="updateDDialog.hide()" />
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:dataTable>
+
+				</h:form>
+			</p:dialog>
+
+			<!-- *************************************************** VENTANA CREAR ***********************************************************   -->
+
+			<p:dialog header="Crear Situación financiera" widgetVar="newDialog"
+				resizable="false" id="newDlg" showEffect="fade" hideEffect="explode"
+				modal="true">
+				<h:form id="newForm">
+					<p:panel id="panelCrear">
+						<p:growl id="msgs" showDetail="true" />
+						<p:panelGrid style="margin-top:0px; width:100%; ">
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Entidad" />
+								</p:column>
+								<p:column colspan="2" style="font-weight: bold;">
+									<p:outputLabel id="nombreentidad"
+										value="#{entSituacionFinancieraBean.entidad.nombreEntidad}" />
+
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Variable" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+
+									<p:selectOneMenu id="variableList" label="Variable"
+										value="#{entSituacionFinancieraBean.variable}" required="true"
+										requiredMessage="Campo Variable Obligatorio">
+										<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+										<f:selectItems
+											value="#{entSituacionFinancieraBean.listaVariables()}"
+											var="va" itemLabel="#{va.descripcionVariable}" />
+
+										<p:ajax update="indicadorList" event="change"
+											process="variableList"
+											listener="#{entSituacionFinancieraBean.listaVariableChange()}" />
+										<f:converter converterId="GenericConvertEntity" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:message for="variableList" id="msgVariableAdd"
+										display="icon" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Indicador" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+
+									<p:selectOneMenu id="indicadorList" label="Indicador"
+										value="#{entSituacionFinancieraBean.situacionFinanciera.entIndicador}"
+										required="true" requiredMessage="Campo Indicador Obligatorio">
+										<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+										<f:selectItems
+											value="#{entSituacionFinancieraBean.listaIndicadores()}"
+											var="ind" itemLabel="#{ind.descripcionIndicador}" />
+										<p:ajax update="msgIndicadorAdd" event="keyup" onstart="true" />
+										<f:converter converterId="GenericConvertEntity" />
+									</p:selectOneMenu>
+
+								</p:column>
+								<p:column>
+									<p:message for="indicadorList" id="msgIndicadorAdd"
+										display="icon" />
+
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="3">
+									<p:panelGrid style="margin-top:0px; width:100%; ">
+										<p:row>
+											<p:column colspan="6"
+												styleClass="ui-widget ui-widget-header ui-corner-all"
+												style="font-weight: bold; text-align:center;">
+												<p:outputLabel value="Valores de los Indicadores anuales" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="2"
+												styleClass="ui-widget ui-widget-header ui-corner-all"
+												style="font-weight: bold; text-align:center;">
+												<p:outputLabel
+													value="#{entSituacionFinancieraBean.anios().get(0).anio}" />
+											</p:column>
+											<p:column colspan="2"
+												styleClass="ui-widget ui-widget-header ui-corner-all"
+												style="font-weight: bold; text-align:center;">
+												<p:outputLabel
+													value="#{entSituacionFinancieraBean.anios().get(1).anio}" />
+											</p:column>
+											<p:column colspan="2"
+												styleClass="ui-widget ui-widget-header ui-corner-all"
+												style="font-weight: bold; text-align:center;">
+												<p:outputLabel
+													value="#{entSituacionFinancieraBean.anios().get(2).anio}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<p:inputText id="anioUno" required="true"
+													requiredMessage="Valor del Primer Año obligatorio."
+													validatorMessage="No tiene el tipo correcto. El rango permitido es [0 - 999.999]"
+													label="Valor del año #{entSituacionFinancieraBean.anios().get(0).anio}"
+													value="#{entSituacionFinancieraBean.valorU}">
+													<f:validateDoubleRange minimum="0" maximum="999.999" />
+													<p:ajax update="msgAnio1" event="keyup" onstart="true" />
+												</p:inputText>
+											</p:column>
+											<p:column>
+												<p:message for="anioUno" id="msgAnio1" display="icon" />
+											</p:column>
+
+											<p:column>
+												<p:inputText id="anioDos"
+													label="Valor del año #{entSituacionFinancieraBean.anios().get(1).anio}"
+													required="true"
+													validatorMessage="No tiene el tipo correcto. El rango permitido es [0 - 999.999]"
+													requiredMessage="Valor del Segundo Año obligatorio."
+													value="#{entSituacionFinancieraBean.valorD}">
+													<f:validateDoubleRange minimum="0" maximum="999.999" />
+													<p:ajax update="msgAnio2" event="keyup" onstart="true" />
+												</p:inputText>
+											</p:column>
+											<p:column>
+												<p:message for="anioDos" id="msgAnio2" display="icon" />
+											</p:column>
+											<p:column>
+												<p:inputText id="anioTres"
+													label="Valor del año #{entSituacionFinancieraBean.anios().get(2).anio}"
+													required="true"
+													validatorMessage="No tiene el tipo correcto. El rango permitido es [0 - 999.999]"
+													requiredMessage="Valor del Tercer Año obligatorio."
+													value="#{entSituacionFinancieraBean.valorT}">
+													<f:validateDoubleRange minimum="0" maximum="999.999" />
+													<p:ajax update="msgAnio3" event="keyup" onstart="true" />
+												</p:inputText>
+											</p:column>
+											<p:column>
+												<p:message for="anioTres" id="msgAnio3" display="icon" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:column>
+							</p:row>
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="6">
+										<p:commandButton
+											update=":formEntidad:dataTable, :growl, panelCrear"
+											icon="ui-icon-disk" title="Guardar"
+											oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+											action="#{entSituacionFinancieraBean.crear()}" ajax="true" />
+
+										<p:commandButton type="reset" icon="ui-icon-refresh"
+											title="Refrescar" update="newForm"></p:commandButton>
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+
+
+			<script type="text/javascript">
+				function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+					dialog = jQuery('#' + dialogName);
+					if (args.validationFailed) {
+						dialog.effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						clearForm(formName);
+						newDialog.hide();
+						updateDialog.hide();
+					}
+				}
+				function clearForm(formName) {
+					jQuery('#' + formName).each(function() {
+						this.reset();
+					});
+				}
+
+			</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

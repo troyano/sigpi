@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_opciones2.png"
+			title="Menú > Variables de Entidades" />
+		<p:outputLabel value="Variables de Entidades"
+			title="Menú > Variables de Entidades" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="0">
+			<p:menuitem id="cero" value="Inicio Opciones Entidades"
+				title="Inicio Opciones Entidades"
+				url="/OpcionesEntidades/OpcionesEntidades.jsf"
+				style="font-weight: bold;" />
+
+			<p:menuitem id="uno" value="Sector" title="Sector"
+				url="/OpcionesEntidades/EntSector.jsf" />
+
+			<p:menuitem id="dos" value="Tamaño Entidad" title="Tamaño Entidad"
+				url="/OpcionesEntidades/EntidadTamano.jsf" />
+
+			<p:menuitem id="tres" value="Tipo Empresa" title="Tipo Empresa"
+				url="/OpcionesEntidades/TipoEmpresa.jsf" />
+
+			<p:menuitem id="cuatro" value="Tipo Entidad" title="Tipo Entidad"
+				url="/OpcionesEntidades/TipoEntidad.jsf" />
+
+			<p:menuitem id="cinco" value="Tipo Contribuyente"
+				title="Tipo Contribuyente"
+				url="/OpcionesEntidades/Contribuyente.jsf" />
+
+			<p:menuitem id="seis" value="Codigo CIIU" title="Codigo CIIU"
+				url="/OpcionesEntidades/CodigoCIIU.jsf" />
+
+			<p:menuitem id="siete" value="Rol Entidad" title="Rol Entidad"
+				url="${requestContextPath}/OpcionesEntidades/Rol_entidad.jsf" />
+
+			<p:menuitem id="ocho" value="Variables Financieras" title="Variables Financieras"
+				url="${requestContextPath}/OpcionesEntidades/Variables_financieras.jsf" />
+
+			<p:menuitem id="nueve" value="Indicadores de Variables" title="Indicadores de Variables"
+				url="${requestContextPath}/OpcionesEntidades/Indicadores_variables.jsf" />
+		</p:tabMenu>
+	</ui:define>
+
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/menuPrincipal/btn_opciones2.png" />
+	</ui:define>
+</ui:composition>
+</html>

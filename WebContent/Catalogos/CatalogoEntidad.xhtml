@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+
+	<h:form id="formSearch">
+		<p:panel id="panelDialog" style=" background:#F2F2F2;">
+
+			<p:panel id="panelBusqueda">
+				<p:panelGrid style="margin-top:0px; width:100%; ">
+					<p:row>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Identificación" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:inputText id="identificacion"
+								value="#{catalogoBuscarEntidadBean.entidadBuscar.numeroIdentificacion}" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:outputLabel value="Nombre" />
+						</p:column>
+						<p:column style="font-weight: bold;">
+							<p:inputText id="nombre"
+								value="#{catalogoBuscarEntidadBean.entidadBuscar.nombreEntidad}" />
+						</p:column>
+						<p:column rowspan="2" style="font-weight: bold;">
+							<div align="right">
+								<p:commandButton icon="ui-icon-search" title="Buscar"
+									ActionListener="" update="dataTable"
+									style=" margin:0px 0px 0px 5px;"
+									action="#{catalogoBuscarEntidadBean.dataTable()}" />
+								<p:commandButton icon="ui-icon-refresh" update="panelBusqueda"
+									style=" margin:4px;" process="@this"
+									title="Refrescar / Limpiar">
+									<p:resetInput target="panelBusqueda" />
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+			</p:panel>
+
+			<p:panel id="paneldataTable" style="margin-top:7px;">
+
+				<p:dataTable id="dataTable" var="ent"
+					value="#{catalogoBuscarEntidadBean.listaEntidades}"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+					rowKey="#{ent.idEntEntidad}"
+					selection="#{catalogoBuscarEntidadBean.selected}">
+
+					<f:facet name="header">
+						<h:outputLabel value="Listado de Entidades" />
+					</f:facet>
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Nombre Entidad" />
+						</f:facet>
+						<h:outputText value="#{ent.nombreEntidad}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Identificación" />
+						</f:facet>
+						<h:outputText
+							value="#{ent.numeroIdentificacion} - #{ent.entTipoIdentificacion.tipoIdentificacion}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Representante Legal" />
+						</f:facet>
+						<h:outputText
+							value="#{ent.entRepresentantelegal.pnombre_representante_legal} #{ent.entRepresentantelegal.papellido_representante_legal}" />
+					</p:column>
+					<f:facet name="footer">
+						<div align="right">
+
+							<p:commandButton icon="ui-icon-circle-check" title="Agregar"
+								oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','searchDialog');"
+								style=" margin:0px 0px 0px 5px;">
+
+								<f:setPropertyActionListener
+									target="#{catalogoBuscarEntidadBean.selected}" value="#{ent}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-cancel" title="Cancelar"
+								style=" margin:0px 0px 0px 5px;"
+								oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','searchDialog');" />
+						</div>
+					</f:facet>
+				</p:dataTable>
+
+			</p:panel>
+		</p:panel>
+	</h:form>
+</ui:composition>
+
+</html>

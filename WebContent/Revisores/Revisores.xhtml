@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_revisor.png"
+			title="Menú > Revisores" />
+		<p:outputLabel value="Revisores" title="Menú > Revisores" />
+	</ui:define>
+	<ui:define name="menu">
+		<!-- 		<ui:include src="/Template/menuRevisores.xhtml" /> -->
+		<p:tabMenu activeIndex="0">
+			<p:menuitem id="cero" value="Inicio Revisores"
+				url="${requestContextPath}/Revisores/Revisores.jsf"
+				title="Inicio Revisores" style="font-weight: bold;" />
+
+			<p:menuitem id="uno" value="Conf. Variables" title="Conf. Variables"
+				url="${requestContextPath}/Revisores/Variables.jsf" />
+
+			<p:menuitem id="dos" value="Conf. Descriptores"
+				title="Conf. Descriptores"
+				url="${requestContextPath}/Revisores/Descriptores.jsf" />
+
+			<p:menuitem id="tres" value="Conf. Tipo Variables"
+				title="Conf. Tipo Variables"
+				url="${requestContextPath}/Revisores/TipoVariablesEvaluacion.jsf" />
+
+			<p:menuitem id="cuatro" value="Lista de Revisores"
+				title="Lista de Revisores" url="#" />
+
+			<p:menuitem id="cinco" value="Asignación de Revisores"
+				title="Asignación de Revisores" url="#" />
+				
+			<p:menuitem id="seis" value="Histórico Proyectos Revisados"
+				title="Lista de Revisores" url="#" />
+
+			<p:menuitem id="siete" value="Proyectos por Revisar"
+				title="Proyectos por Revisar" url="#" />
+
+		</p:tabMenu>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/menuPrincipal/btn_revisor.png" />
+	</ui:define>
+</ui:composition>
+</html>

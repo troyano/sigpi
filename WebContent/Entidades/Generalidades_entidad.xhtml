@@ -1,0 +1,1790 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_entidad1.png"
+				title="Menú > Gestión de Entidades" />
+			<p:outputLabel value="Gestión de Entidades"
+				title="Menú > Gestión de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="1">
+				<p:menuitem id="uno" value="Inicio Entidades"
+					url="${requestContextPath}/Entidades/Entidades.jsf"
+					title="Inicio Entidades" />
+
+				<p:menuitem id="dos" value="Generalidades" title="Generalidades"
+					style="font-weight: bold;"
+					url="${requestContextPath}/Entidades/Generalidades_entidad.jsf" />
+
+				<p:menuitem value="Productos y Servicios"
+					title="Productos y Servicios"
+					url="${requestContextPath}/Entidades/productos_servicios.jsf" />
+
+				<p:menuitem value="Situción Financiera" title="Situción Financiera"
+					url="${requestContextPath}/Entidades/Situacion_financiera.jsf" />
+
+			</p:tabMenu>
+		</ui:define>
+		<ui:define name="contenido">
+
+			<!-- Inicio Formulario de crear Entidad ********************************************************************************************************************** -->
+			<h:form id="formAdd">
+
+				<p:growl id="growl" showDetail="true" />
+				<p:panel id="panel" header="#{entidad['panel.datos_basicos']}"
+					style=" background:#F2F2F2;">
+
+					<table align="center" width="100%" border="0">
+						<tr>
+							<td><p:panel id="panelInternoAdd" style="width:100%;"
+									widgetVar="panelI"
+									rendered="#{entGeneralidadesBean.tipoAccion == 1}">
+
+									<p:panelGrid style="margin-top:0px; width:100%; ">
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.nombre']}" />
+											</p:column>
+											<p:column colspan="4" style="font-weight: bold;">
+												<p:inputText id="nombreentidad" required="true"
+													style="width:96%; text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.nombreentidad']}"
+													value="#{entGeneralidadesBean.entidad.nombreEntidad}">
+													<p:ajax update="msgnombreE" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="nombreentidad" id="msgnombreE"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.tipo_id']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="tipoIdentificacionList"
+													value="#{entGeneralidadesBean.entidad.entTipoIdentificacion}"
+													required="true"
+													requiredMessage="#{entidad['requiredMessage.tipo_id']}"
+													label="#{entidad['label.tipo_id']}">
+													<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+													<f:selectItems
+														value="#{entGeneralidadesBean.listaEntTipoIdentificacion()}"
+														var="ti" itemLabel="#{ti.tipoIdentificacion}" />
+													<p:ajax update="msgTipoIdentificacion" event="keyup"
+														onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+
+
+											</p:column>
+											<p:column>
+												<p:message for="tipoIdentificacionList"
+													id="msgTipoIdentificacion" display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.numero_id']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="numero" required="true"
+													style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.numero_id']}"
+													value="#{entGeneralidadesBean.entidad.numeroIdentificacion}">
+													<p:ajax update="msgnumeroID" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="numero" id="msgnumeroID" display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.pais']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="paisList"
+													value="#{entGeneralidadesBean.entidad.pais}"
+													required="true"
+													requiredMessage="#{entidad['requiredMessage.pais']}"
+													label="#{entidad['label.pais']}">
+													<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+													<f:selectItems value="#{entGeneralidadesBean.listaPais()}"
+														var="p" itemLabel="#{p.nombrePais}" />
+													<p:ajax update="msgPais" event="keyup" onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+
+											</p:column>
+											<p:column>
+												<p:message for="paisList" id="msgPais" display="icon" />
+											</p:column>
+
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.ciudad']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="municipioList"
+													value="#{entGeneralidadesBean.entidad.municipio}"
+													required="true"
+													requiredMessage="#{entidad['label.ciudad']}"
+													label="#{entidad['label.ciudad']}">
+													<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+													<f:selectItems
+														value="#{entGeneralidadesBean.listaMunicipio()}" var="m"
+														itemLabel="#{m.ciudad}- #{m.departamento.nombreDepartamento}" />
+													<p:ajax update="msgMunicipio" event="keyup" onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+											</p:column>
+											<p:column>
+												<p:message for="municipioList" id="msgMunicipio"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.direccion']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="direccion" required="true"
+													style="width:96%; text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.direccion']}"
+													value="#{entGeneralidadesBean.entidad.direccion}">
+													<p:ajax update="msgDireccion" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="direccion" id="msgDireccion" display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.telefono']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="telefono" required="true"
+													style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.telefono']}"
+													value="#{entGeneralidadesBean.entidad.telefono}">
+													<p:ajax update="msgTelefono" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="telefono" id="msgTelefono" display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.email']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="e_mail" required="true" style="width:96%;"
+													requiredMessage="#{entidad['requiredMessage.e_amil']}"
+													validatorMessage="Formato e-mail no valido"
+													value="#{entGeneralidadesBean.entidad.email}">
+													<f:validateRegex
+														pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+													<p:ajax update="msgEmail" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="e_mail" id="msgEmail" display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.fax']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="fax" style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													value="#{entGeneralidadesBean.entidad.fax}" />
+											</p:column>
+											<p:column />
+										</p:row>
+
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.web_site']	}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="website" style="width:96%;"
+													value="#{entGeneralidadesBean.entidad.website}" />
+											</p:column>
+											<p:column />
+											<p:column />
+											<p:column />
+											<p:column />
+
+										</p:row>
+									</p:panelGrid>
+
+									<!-- ********************************************** Panel I   Editar ************************************************************************************* -->
+								</p:panel> <p:panel id="panelInternoEdit" style="width:100%;"
+									widgetVar="panelII"
+									rendered="#{entGeneralidadesBean.tipoAccion == 2}">
+
+									<p:panelGrid id="gridInternoEdit"
+										style="margin-top:0px; width:100%; ">
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.nombre']}" />
+											</p:column>
+											<p:column colspan="4" style="font-weight: bold;">
+												<p:inputText id="nombreentidadEdit" required="true"
+													style=" width:96%; text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.nombreentidad']}"
+													value="#{catalogoBuscarEntidadBean.selected.nombreEntidad}">
+													<p:ajax update="msgnombreEEdit" event="keyup"
+														onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="nombreentidadEdit" id="msgnombreEEdit"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.tipo_id']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="tipoIdentificacionListEdit"
+													value="#{catalogoBuscarEntidadBean.selected.entTipoIdentificacion}"
+													required="false"
+													requiredMessage="#{entidad['requiredMessage.tipo_id']}"
+													label="#{entidad['label.tipo_id']}">
+													<f:selectItem
+														itemLabel="#{catalogoBuscarEntidadBean.selected.entTipoIdentificacion.tipoIdentificacion}" />
+													<f:selectItems
+														value="#{entGeneralidadesBean.listaEntTipoIdentificacion()}"
+														var="ti" itemLabel="#{ti.tipoIdentificacion}" />
+													<p:ajax update="msgTipoIdentificacionEdit" event="keyup"
+														onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+											</p:column>
+											<p:column>
+												<p:message for="tipoIdentificacionListEdit"
+													id="msgTipoIdentificacionEdit" display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.numero_id']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="numeroEdit" required="true"
+													style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.numero_id']}"
+													value="#{catalogoBuscarEntidadBean.selected.numeroIdentificacion}">
+													<p:ajax update="msgnumeroIDEdit" event="keyup"
+														onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="numeroEdit" id="msgnumeroIDEdit"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.pais']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="paisListEdit"
+													value="#{catalogoBuscarEntidadBean.selected.pais}"
+													required="false"
+													requiredMessage="#{entidad['requiredMessage.pais']}"
+													label="#{entidad['label.pais']}">
+													<f:selectItem
+														itemLabel="#{catalogoBuscarEntidadBean.selected.pais.nombrePais}" />
+													<f:selectItems value="#{entGeneralidadesBean.listaPais()}"
+														var="p" itemLabel="#{p.nombrePais}" />
+													<p:ajax update="msgPaisEdit" event="keyup" onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+
+											</p:column>
+											<p:column>
+												<p:message for="paisListEdit" id="msgPaisEdit"
+													display="icon" />
+											</p:column>
+
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.ciudad']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:selectOneMenu id="municipioListEdit"
+													value="#{catalogoBuscarEntidadBean.selected.municipio}"
+													required="false"
+													requiredMessage="#{entidad['label.ciudad']}"
+													label="#{entidad['label.ciudad']}">
+													<f:selectItem
+														itemLabel="#{catalogoBuscarEntidadBean.selected.municipio.ciudad}" />
+													<f:selectItems
+														value="#{entGeneralidadesBean.listaMunicipio()}" var="m"
+														itemLabel="#{m.ciudad}- #{m.departamento.nombreDepartamento}" />
+													<p:ajax update="msgMunicipioEdit" event="keyup"
+														onstart="true" />
+													<f:converter converterId="GenericConvertEntity" />
+
+												</p:selectOneMenu>
+											</p:column>
+											<p:column>
+												<p:message for="municipioListEdit" id="msgMunicipioEdit"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.direccion']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="direccionEdit" required="true"
+													style="  width:96%; text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.direccion']}"
+													value="#{catalogoBuscarEntidadBean.selected.direccion}">
+													<p:ajax update="msgDireccionEdit" event="keyup"
+														onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="direccionEdit" id="msgDireccionEdit"
+													display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.telefono']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="telefonoEdit" required="true"
+													style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													requiredMessage="#{entidad['requiredMessage.telefono']}"
+													value="#{catalogoBuscarEntidadBean.selected.telefono}">
+													<p:ajax update="msgTelefonoEdit" event="keyup"
+														onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="telefonoEdit" id="msgTelefonoEdit"
+													display="icon" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.email']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="e_mailEdit" required="true"
+													style="width:96%;"
+													requiredMessage="#{entidad['requiredMessage.e_amil']}"
+													validatorMessage="Formato e-mail no valido"
+													value="#{catalogoBuscarEntidadBean.selected.email}">
+													<f:validateRegex
+														pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+													<p:ajax update="msgEmailEdit" event="keyup" onstart="true" />
+												</p:inputText>
+
+											</p:column>
+											<p:column>
+												<p:message for="e_mailEdit" id="msgEmailEdit" display="icon" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.fax']}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="faxEdit" style="text-transform:uppercase;"
+													onkeyup="javascript:this.value=this.value.toUpperCase();"
+													value="#{catalogoBuscarEntidadBean.selected.fax}" />
+											</p:column>
+											<p:column />
+										</p:row>
+
+										<p:row>
+											<p:column style="font-weight: bold;">
+												<p:outputLabel value="#{entidad['label.web_site']	}" />
+											</p:column>
+											<p:column style="font-weight: bold;">
+												<p:inputText id="websiteEdit" style="width:96%;"
+													value="#{catalogoBuscarEntidadBean.selected.website}" />
+											</p:column>
+											<p:column />
+											<p:column />
+											<p:column />
+											<p:column />
+
+										</p:row>
+									</p:panelGrid>
+
+
+								</p:panel></td>
+							<td align="right">
+								<!-- *******************************************************   BOTONES   ******************************************************************** -->
+								<p:panel styleClass="ui-widget ui-widget-header ui-corner-all"
+									style=" width:52px; margin-left:10px;">
+
+									<p:commandButton icon="ui-icon-plusthick" id="crear"
+										title="#{entidad['title.btn_agregar']}" style=" margin:4px;"
+										rendered="#{entGeneralidadesBean.tipoAccion == 0}"
+										immediate="true"
+										actionListener="#{entGeneralidadesBean.accionCrear()}"
+										update="formAdd" />
+
+									<p:commandButton icon="ui-icon-pencil" id="editar"
+										title="#{entidad['title.btn_Editar']}" style=" margin:4px;"
+										rendered="#{entGeneralidadesBean.tipoAccion == 0}"
+										immediate="true"
+										actionListener="#{entGeneralidadesBean.accionEditar()}"
+										update="formAdd" />
+
+									<p:commandButton icon="ui-icon-search" id="buscar"
+										title="#{entidad['title.btn_Buscar']}" style=" margin:4px;"
+										rendered="#{entGeneralidadesBean.tipoAccion == 2}"
+										update=":formSearch:panelBusqueda" immediate="true"
+										actionListener="#{catalogoBuscarEntidadBean.limpiarCatalogo()}"
+										oncomplete="searchDialog.show()">
+										<p:resetInput target=":formSearch:panelBusqueda" />
+									</p:commandButton>
+
+									<p:commandButton icon="ui-icon-disk" id="guardarCrear"
+										title="#{entidad['title.btn_Guardar']}"
+										rendered="#{entGeneralidadesBean.tipoAccion == 1}"
+										style=" margin:4px;" ajax="false" update="growl"
+										action="#{entGeneralidadesBean.crearEntidad()}"
+										onkeyup="clearForm(formAdd)" />
+
+									<p:commandButton icon="ui-icon-disk" id="guardarEdiacion"
+										title="#{entidad['title.btn_Guardar_Cambios']}"
+										rendered="#{entGeneralidadesBean.tipoAccion == 2}"
+										style=" margin:4px;" ajax="false" update="growl"
+										action="#{catalogoBuscarEntidadBean.editar()}"
+										onkeyup="clearForm(formAdd)" />
+
+									<p:commandButton icon="ui-icon-refresh"
+										title="#{entidad['title.btn_limpiar']}"
+										update="panelInternoAdd,tabsAdd" style=" margin:4px;"
+										rendered="#{entGeneralidadesBean.tipoAccion == 1}"
+										process="@this" actionListener="#{entGeneralidadesBean.reset}" />
+
+									<p:commandButton icon="ui-icon-cancel"
+										title="#{entidad['title.btn_Cancelar']}" style=" margin:4px;"
+										immediate="true" ajax="false"
+										rendered="#{entGeneralidadesBean.tipoAccion == 1 or entGeneralidadesBean.tipoAccion == 2}"
+										actionListener="#{entGeneralidadesBean.inicializar()}"
+										id="accionInicializarAdd"
+										update="panelInternoAdd,panelInternoEdit" />
+
+								</p:panel> <!-- *******************************************************   BOTONES   ******************************************************************** -->
+							</td>
+						</tr>
+					</table>
+
+
+					<br />
+					<p:tabView id="tabsAdd"
+						rendered="#{entGeneralidadesBean.tipoAccion == 1}">
+						<p:tab id="representanteLegal"
+							title="#{entidad['title.tab_representate_legal']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="PnombreR" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.nombre_representante']}"
+											value="#{entGeneralidadesBean.representante.pnombre_representante_legal}">
+											<p:ajax update="msgPNombreR" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="PnombreR" id="msgPNombreR" display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="SnombreR" style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.representante.snombre_representante_legal}">
+										</p:inputText>
+
+									</p:column>
+									<p:column />
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="PapellidoR" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.apellido_representante']}"
+											value="#{entGeneralidadesBean.representante.papellido_representante_legal}">
+											<p:ajax update="msgPApellidoR" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="PapellidoR" id="msgPApellidoR" display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="SapellidoR" style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.representante.sapellido_representante_legal}">
+										</p:inputText>
+
+									</p:column>
+									<p:column />
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_id']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoIdentificacionListR"
+											value="#{entGeneralidadesBean.representante.entTipoIdentificacion}"
+											required="true"
+											requiredMessage="#{entidad['requiredMessage.tipo_id_representante']}"
+											label="#{entidad['label.tipo_id']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoIdentificacion()}"
+												var="tiR" itemLabel="#{tiR.tipoIdentificacion}" />
+											<p:ajax update="msgTipoIdentificacionR" event="keyup"
+												onstart="true" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<p:message for="tipoIdentificacionListR"
+											id="msgTipoIdentificacionR" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.numero_id']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="numeroR" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.numero_id_representamte']}"
+											value="#{entGeneralidadesBean.representante.numeroRepresentante}">
+											<p:ajax update="msgNumeroR" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="numeroR" id="msgNumeroR" display="icon" />
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="contactos" title="#{entidad['title.tab_contactos']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column colspan="3"
+										style="font-weight: bold; font-size:125%;  text-align:center;">
+										<p:outputLabel value="#{entidad['label.contacto_1']}" />
+									</p:column>
+
+									<p:column rowspan="8"></p:column>
+
+									<p:column colspan="3"
+										style="font-weight: bold; font-size:125%; text-align:center;">
+										<p:outputLabel value="#{entidad['label.contacto_2']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerNombre_con1" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.nombre_contacto_1']}"
+											value="#{entGeneralidadesBean.contacto.pnombre_contacto}">
+											<p:ajax update="msgprimerNombre_con1" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="primerNombre_con1" id="msgprimerNombre_con1"
+											display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerNombre_con2"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.pnombre_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoNombre_con1"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto.snombre_contacto}" />
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoNombre_con2"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.snombre_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerApellido_con1" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.apellido_contacto_1']}"
+											value="#{entGeneralidadesBean.contacto.papellido_contacto}">
+											<p:ajax update="msgprimerApellido_con1" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="primerApellido_con1"
+											id="msgprimerApellido_con1" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerApellido_con2"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.papellido_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoApellido_con1"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto.sapellido_contacto}" />
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_contacto_2']}o" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoApellido_con2"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.sapellido_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.cargo_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="cargo_con1" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.cargo_contacto_1']}"
+											value="#{entGeneralidadesBean.contacto.cargoContacto}">
+											<p:ajax update="msgcargo_con1" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="cargo_con1" id="msgcargo_con1" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.cargo_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="cargo_con2" style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.cargoContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.telefono_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="telefono_con1" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.telefono_contacto_1']}"
+											value="#{entGeneralidadesBean.contacto.telefonoContacto}">
+											<p:ajax update="msgtelefono_con1" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="telefono_con1" id="msgtelefono_con1"
+											display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.telefono_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="telefono_con2"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.contacto2.telefonoContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.email_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="email_con1" required="true"
+											requiredMessage="#{entidad['requiredMessage.email_contacto_1']}"
+											validatorMessage="Formato e-mail no valido"
+											value="#{entGeneralidadesBean.contacto.emailContacto}">
+											<f:validateRegex
+												pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											<p:ajax update="msgemail_con1" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="email_con1" id="msgemail_con1" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.email_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="email_co2"
+											value="#{entGeneralidadesBean.contacto2.emailContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="clasificacion"
+							title="#{entidad['title.tab_clasificacion']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.ciiu']}" />
+									</p:column>
+									<p:column colspan="5" style="font-weight: bold;">
+										<p:selectOneMenu id="ciiu"
+											value="#{entGeneralidadesBean.entidad.entCiiu}"
+											label="#{entidad['label.ciiu']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems value="#{entGeneralidadesBean.listaEntCiiu()}"
+												var="ci"
+												itemLabel="#{ci.seccionCiiu} #{ci.clase}-#{ci.descripcionCiiu}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.sector']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="sectorList"
+											value="#{entGeneralidadesBean.sector}" required="true"
+											requiredMessage="#{entidad['requiredMessage.sector']}"
+											label="#{entidad['label.sector']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}"
+												itemValue="0" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntSector()}" var="sec"
+												itemLabel="#{sec.nombreSector}" />
+
+											<p:ajax update="tipoEntidadList" event="change"
+												process="sectorList"
+												listener="#{entGeneralidadesBean.listaChange()}" />
+											<f:converter converterId="GenericConvertEntity" />
+										</p:selectOneMenu>
+										<!-- 											<p:commandButton id="btn" partialSubmit="sectorList" -->
+										<!-- 												value="process" /> -->
+									</p:column>
+									<p:column>
+										<p:message for="sectorList" id="msgSector" display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_entidad']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoEntidadList"
+											value="#{entGeneralidadesBean.entidad.entTipoEntidad}"
+											required="true"
+											requiredMessage="#{entidad['requiredMessage.tipo_entidad']}"
+											label="#{entidad['label.tipo_entidad']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoEntidad()}"
+												var="ten" itemLabel="#{ten.descripcionEntidad}" />
+											<p:ajax update="msgTipoEntidad" event="keyup" onstart="true" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+
+									</p:column>
+									<p:column>
+										<p:message for="tipoEntidadList" id="msgTipoEntidad"
+											display="icon" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tamanio']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tamanio"
+											value="#{entGeneralidadesBean.entidad.entTamanoEntidad}"
+											label="#{entidad['label.tamanio']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTamanoEntidad()}"
+												var="tam" itemLabel="#{tam.tamano}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_contribuyente']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoContribuyenteList"
+											value="#{entGeneralidadesBean.entidad.entContribuyente}"
+											label="#{entidad['label.tipo_contribuyente']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntContribuyente()}"
+												var="cont" itemLabel="#{cont.nombreContribuyente}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+									<p:column />
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="adicional" title="#{entidad['title.tab_adicional']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.camara_comercio']}" />
+									</p:column>
+									<p:column colspan="3" style="font-weight: bold;">
+										<p:inputText id="matriculacc"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.entidad.matriculaCamara}" />
+									</p:column>
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_empresa']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoEmpresa"
+											value="#{entGeneralidadesBean.entidad.entTipoEmpresa}"
+											label="#{entidad['label.tipo_empresa']}">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoEmpresa}"
+												var="temp" itemLabel="#{temp.descripcionTipo}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.fecha_constitucion']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:calendar id="fechaConstitucion" showOn="button"
+											styleClass="input" pattern="yyyy-MM-dd"
+											label="#{entidad['label.fecha_constitucion']}"
+											value="#{entGeneralidadesBean.entidad.fechaConstitucion}">
+
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.exporta']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="exporta">
+											<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}"
+												itemValue="" />
+											<f:selectItem itemLabel="#{entidad['itemLabel.si']}"
+												itemValue="#{entidad['itemValue.si']}" />
+											<f:selectItem itemLabel="#{entidad['itemLabel.no']}"
+												itemValue="#{entidad['itemValue.no']}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.ventas_anio']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="ventas" style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{entGeneralidadesBean.entidad.ventaUntimoAnio}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="capital" title="#{entidad['title.tab_capital']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column colspan="2"
+										style="font-weight: bold; font-size:125%;  text-align:center;">
+										<p:outputLabel value="#{entidad['label.capital_nacional']}" />
+									</p:column>
+									<p:column colspan="2"
+										style="font-weight: bold; font-size:125%; text-align:center;">
+										<p:outputLabel value="#{entidad['label.capital_extranjero']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.publico']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="publico_nac"
+											value="#{entGeneralidadesBean.entidad.publicoNacional}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.publico']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="publico_ext"
+											value="#{entGeneralidadesBean.entidad.publicoExtranjero}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.privado']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="privado_nac"
+											value="#{entGeneralidadesBean.entidad.privadoNacional}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.privado']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="privado_ext"
+											value="#{entGeneralidadesBean.entidad.privadoExtranjero}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+					</p:tabView>
+
+
+					<!-- Fin Formulario de crear Entidad ********************************************************************************************************************** -->
+
+
+					<!-- TABS  EDITAR Entidad ********************************************************************************************************************** -->
+
+					<p:tabView id="tabsEdit"
+						rendered="#{entGeneralidadesBean.tipoAccion == 2}">
+						<p:tab id="representanteLegalEdit"
+							title="#{entidad['title.tab_representate_legal']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="PnombreREdit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.nombre_representante']}"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.pnombre_representante_legal}">
+											<p:ajax update="msgPNombreREdit" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="PnombreREdit" id="msgPNombreREdit"
+											display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="SnombreREdit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.snombre_representante_legal}">
+										</p:inputText>
+
+									</p:column>
+									<p:column />
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="PapellidoREdit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.apellido_representante']}"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.papellido_representante_legal}">
+											<p:ajax update="msgPApellidoREdit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="PapellidoREdit" id="msgPApellidoREdit"
+											display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_representante']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="SapellidoREdit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.sapellido_representante_legal}">
+										</p:inputText>
+
+									</p:column>
+									<p:column />
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_id']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoIdentificacionListREdit"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.entTipoIdentificacion}"
+											required="true"
+											requiredMessage="#{entidad['requiredMessage.tipo_id_representante']}"
+											label="#{entidad['label.tipo_id']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selectedRepresentante.entTipoIdentificacion.tipoIdentificacion}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoIdentificacion()}"
+												var="tiR" itemLabel="#{tiR.tipoIdentificacion}" />
+											<p:ajax update="msgTipoIdentificacionREdit" event="keyup"
+												onstart="true" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<p:message for="tipoIdentificacionListREdit"
+											id="msgTipoIdentificacionREdit" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.numero_id']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="numeroREdit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.numero_id_representamte']}"
+											value="#{catalogoBuscarEntidadBean.selectedRepresentante.numeroRepresentante}">
+											<p:ajax update="msgNumeroREdit" event="keyup" onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="numeroREdit" id="msgNumeroREdit"
+											display="icon" />
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="contactosEdit"
+							title="#{entidad['title.tab_contactos']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column colspan="3"
+										style="font-weight: bold; font-size:125%;  text-align:center;">
+										<p:outputLabel value="#{entidad['label.contacto_1']}" />
+									</p:column>
+
+									<p:column rowspan="8"></p:column>
+
+									<p:column colspan="3"
+										style="font-weight: bold; font-size:125%; text-align:center;">
+										<p:outputLabel value="#{entidad['label.contacto_2']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerNombre_con1Edit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.nombre_contacto_1']}"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.pnombre_contacto}">
+											<p:ajax update="msgprimerNombre_con1Edit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="primerNombre_con1Edit"
+											id="msgprimerNombre_con1Edit" display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_nombre_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerNombre_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.pnombre_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoNombre_con1Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.snombre_contacto}" />
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_nombre_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoNombre_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.snombre_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerApellido_con1Edit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.apellido_contacto_1']}"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.papellido_contacto}">
+											<p:ajax update="msgprimerApellido_con1Edit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="primerApellido_con1Edit"
+											id="msgprimerApellido_con1Edit" display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.primer_apellido_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="primerApellido_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.papellido_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoApellido_con1Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.sapellido_contacto}" />
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel
+											value="#{entidad['label.segundo_apellido_contacto_2']}o" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="segundoApellido_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.sapellido_contacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.cargo_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="cargo_con1Edit" required="true"
+											requiredMessage="#{entidad['requiredMessage.cargo_contacto_1']}"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.cargoContacto}">
+											<p:ajax update="msgcargo_con1Edit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="cargo_con1Edit" id="msgcargo_con1Edit"
+											display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.cargo_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="cargo_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.cargoContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.telefono_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="telefono_con1Edit" required="true"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											requiredMessage="#{entidad['requiredMessage.telefono_contacto_1']}"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.telefonoContacto}">
+											<p:ajax update="msgtelefono_con1Edit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="telefono_con1Edit" id="msgtelefono_con1Edit"
+											display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.telefono_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="telefono_con2Edit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.telefonoContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.email_contacto_1']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="email_con1Edit" required="true"
+											requiredMessage="#{entidad['requiredMessage.email_contacto_1']}"
+											validatorMessage="Formato e-mail no valido"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN1.emailContacto}">
+											<f:validateRegex
+												pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											<p:ajax update="msgemail_con1Edit" event="keyup"
+												onstart="true" />
+										</p:inputText>
+
+									</p:column>
+									<p:column>
+										<p:message for="email_con1Edit" id="msgemail_con1Edit"
+											display="icon" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.email_contacto_2']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="email_co2Edit"
+											value="#{catalogoBuscarEntidadBean.selectedContactoN2.emailContacto}" />
+									</p:column>
+									<p:column />
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="clasificacionEdit"
+							title="#{entidad['title.tab_clasificacion']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.ciiu']}" />
+									</p:column>
+									<p:column colspan="5" style="font-weight: bold;">
+										<p:selectOneMenu id="ciiuEdit"
+											value="#{catalogoBuscarEntidadBean.selected.entCiiu}"
+											label="#{entidad['label.ciiu']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entCiiu.seccionCiiu} #{catalogoBuscarEntidadBean.selected.entCiiu.clase} #{catalogoBuscarEntidadBean.selected.entCiiu.descripcionCiiu}" />
+											<f:selectItems value="#{entGeneralidadesBean.listaEntCiiu()}"
+												var="ci"
+												itemLabel="#{ci.seccionCiiu} #{ci.clase}-#{ci.descripcionCiiu}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.sector']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="sectorListEdit"
+											value="#{entGeneralidadesBean.sector}" required="true"
+											requiredMessage="#{entidad['requiredMessage.sector']}"
+											label="#{entidad['label.sector']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entTipoEntidad.entSector.nombreSector}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntSector()}" var="sec"
+												itemLabel="#{sec.nombreSector}" />
+
+											<p:ajax update="tipoEntidadListEdit" event="change"
+												process="sectorListEdit"
+												listener="#{entGeneralidadesBean.listaChange()}" />
+											<f:converter converterId="GenericConvertEntity" />
+										</p:selectOneMenu>
+
+									</p:column>
+									<p:column>
+										<p:message for="sectorListEdit" id="msgSectorEdit"
+											display="icon" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_entidad']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoEntidadListEdit"
+											value="#{catalogoBuscarEntidadBean.selected.entTipoEntidad}"
+											required="true"
+											requiredMessage="#{entidad['requiredMessage.tipo_entidad']}"
+											label="#{entidad['label.tipo_entidad']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entTipoEntidad.descripcionEntidad}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoEntidad()}"
+												var="ten" itemLabel="#{ten.descripcionEntidad}" />
+											<p:ajax update="msgTipoEntidadEdit" event="keyup"
+												onstart="true" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+
+									</p:column>
+									<p:column>
+										<p:message for="tipoEntidadListEdit" id="msgTipoEntidadEdit"
+											display="icon" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tamanio']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tamanioEdit"
+											value="#{catalogoBuscarEntidadBean.selected.entTamanoEntidad}"
+											label="#{entidad['label.tamanio']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entTamanoEntidad.tamano}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTamanoEntidad()}"
+												var="tam" itemLabel="#{tam.tamano}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+									<p:column />
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_contribuyente']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoContribuyenteListEdit"
+											value="#{catalogoBuscarEntidadBean.selected.entContribuyente}"
+											label="#{entidad['label.tipo_contribuyente']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entContribuyente.nombreContribuyente}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntContribuyente()}"
+												var="cont" itemLabel="#{cont.nombreContribuyente}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+									<p:column />
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="adicionalEdit"
+							title="#{entidad['title.tab_adicional']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.camara_comercio']}" />
+									</p:column>
+									<p:column colspan="3" style="font-weight: bold;">
+										<p:inputText id="matriculaccEdit"
+											style="text-transform:uppercase;"
+											onkeyup="javascript:this.value=this.value.toUpperCase();"
+											value="#{catalogoBuscarEntidadBean.selected.matriculaCamara}" />
+									</p:column>
+
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.tipo_empresa']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="tipoEmpresaEdit"
+											value="#{catalogoBuscarEntidadBean.selected.entTipoEmpresa}"
+											label="#{entidad['label.tipo_empresa']}">
+											<f:selectItem
+												itemLabel="#{catalogoBuscarEntidadBean.selected.entTipoEmpresa.descripcionTipo}" />
+											<f:selectItems
+												value="#{entGeneralidadesBean.listaEntTipoEmpresa}"
+												var="temp" itemLabel="#{temp.descripcionTipo}" />
+											<f:converter converterId="GenericConvertEntity" />
+
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.fecha_constitucion']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:calendar id="fechaConstitucionEdit" showOn="button"
+											styleClass="input" pattern="yyyy-MM-dd"
+											label="#{entidad['label.fecha_constitucion']}"
+											value="#{catalogoBuscarEntidadBean.selected.fechaConstitucion}">
+
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.exporta']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:selectOneMenu id="exportaEdit">
+											<f:selectItem itemLabel="#{entidad['itemLabel.si']}"
+												itemValue="#{entidad['itemValue.si']}" />
+											<f:selectItem itemLabel="#{entidad['itemLabel.no']}"
+												itemValue="#{entidad['itemValue.no']}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.ventas_anio']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="ventasEdit"
+											value="#{catalogoBuscarEntidadBean.selected.ventaUntimoAnio}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab id="capital" title="#{entidad['title.tab_capital']}">
+							<p:panelGrid style="margin-top:0px; width:100%;">
+								<p:row>
+									<p:column colspan="2"
+										style="font-weight: bold; font-size:125%;  text-align:center;">
+										<p:outputLabel value="#{entidad['label.capital_nacional']}" />
+									</p:column>
+									<p:column colspan="2"
+										style="font-weight: bold; font-size:125%; text-align:center;">
+										<p:outputLabel value="#{entidad['label.capital_extranjero']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.publico']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="publico_nacEdit"
+											value="#{catalogoBuscarEntidadBean.selected.publicoNacional}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.publico']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="publico_extEdit"
+											value="#{catalogoBuscarEntidadBean.selected.publicoExtranjero}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.privado']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="privado_nacEdit"
+											value="#{catalogoBuscarEntidadBean.selected.privadoNacional}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="#{entidad['label.privado']}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="privado_extEdit"
+											value="#{catalogoBuscarEntidadBean.selected.privadoExtranjero}" />
+										<p:outputLabel value="#{entidad['label.porcentaje']}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+					</p:tabView>
+
+					<!-- Fin TABS EDITAR Entidad ********************************************************************************************************************** -->
+
+
+				</p:panel>
+			</h:form>
+
+			<!-- INICIO catalogo buscar entidad -->
+
+			<p:dialog header="Buscar  Entidad" widgetVar="searchDialog"
+				update="panel" resizable="false" id="searchDlg" modal="true">
+
+
+				<h:form id="formSearch">
+					<p:growl id="growlGeneral" showDetail="true" />
+					<p:panel id="panelDialog" style=" background:#F2F2F2;">
+
+						<p:panel id="panelBusqueda">
+							<p:panelGrid style="margin-top:0px; width:100%; ">
+								<p:row>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="Identificación" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="identificacion"
+											value="#{catalogoBuscarEntidadBean.entidadBuscar.numeroIdentificacion}" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:outputLabel value="Nombre" />
+									</p:column>
+									<p:column style="font-weight: bold;">
+										<p:inputText id="nombre"
+											value="#{catalogoBuscarEntidadBean.entidadBuscar.nombreEntidad}" />
+									</p:column>
+									<p:column rowspan="2" style="font-weight: bold;">
+										<div align="right">
+											<p:commandButton icon="ui-icon-search" title="Buscar"
+												ActionListener="" update="dataTable"
+												style=" margin:0px 5px 0px 0px;"
+												action="#{catalogoBuscarEntidadBean.dataTable()}" />
+
+<!-- 											<p:commandButton icon="ui-icon-refresh" -->
+<!-- 												update="panelBusqueda" style=" margin:4px;" -->
+<!-- 												title="Refrescar / Limpiar"> -->
+<!-- 												<p:resetInput target="formSearch" /> -->
+<!-- 											</p:commandButton> -->
+
+											<p:commandButton icon="ui-icon-refresh"
+												update="panelBusqueda" title="Refrescar / Limpiar"
+												actionListener="#{catalogoBuscarEntidadBean.reset()}">
+												<p:resetInput target="formSearch" />
+											</p:commandButton>
+										</div>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+							<br />
+
+							<p:dataTable id="dataTable" var="ent"
+								value="#{catalogoBuscarEntidadBean.listaEntidades}"
+								rowIndexVar="rowIndex"
+								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+								lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+								emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+								rowKey="#{ent.idEntEntidad}"
+								selection="#{catalogoBuscarEntidadBean.selected}">
+
+								<f:facet name="header">
+									<h:outputLabel value="Listado de Entidades" />
+								</f:facet>
+								<p:column selectionMode="single" style="width:2%" />
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="N°" />
+									</f:facet>
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Nombre Entidad" />
+									</f:facet>
+									<h:outputText value="#{ent.nombreEntidad}" />
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Identificación" />
+									</f:facet>
+									<h:outputText
+										value="#{ent.numeroIdentificacion} - #{ent.entTipoIdentificacion.tipoIdentificacion}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Representante Legal" />
+									</f:facet>
+									<h:outputText
+										value="#{ent.entRepresentantelegal.pnombre_representante_legal} #{ent.entRepresentantelegal.papellido_representante_legal}" />
+								</p:column>
+								<f:facet name="footer">
+									<div align="right">
+
+
+										<p:commandButton icon="ui-icon-circle-check" immediate="true"
+											update=":formSearch:growlGeneral, :formAdd:panelInternoEdit, :formAdd:tabsEdit "
+											action="#{catalogoBuscarEntidadBean.agregar()}"
+											title="#{messages['comun.boton.agregar']}"
+											alt="#{messages['comun.boton.agregar']}">
+											<f:setPropertyActionListener
+												target="#{catalogoBuscarEntidadBean.selected}"
+												value="#{ent}" />
+										</p:commandButton>
+
+										<!-- 										<p:commandButton id="agregar" -->
+										<!-- 											update=":formSearch:growlGeneral, :formAdd:panelInternoEdit, :formAdd:tabsEdit " -->
+										<!-- 											oncomplete="searchDialog.hide())" icon="ui-icon-circle-check" -->
+										<!-- 											immediate="true" title="#{messages['comun.boton.agregar']}" -->
+										<!-- 											alt="#{messages['comun.boton.agregar']}"> -->
+										<!-- 											<f:setPropertyActionListener -->
+										<!-- 												target="#{catalogoBuscarEntidadBean.selected}" -->
+										<!-- 												value="#{ent}" /> -->
+										<!-- 										</p:commandButton> -->
+
+										<p:commandButton icon="ui-icon-cancel" title="Cancelar"
+											style=" margin:0px 0px 0px 5px;"
+											onclick="searchDialog.hide()" />
+									</div>
+								</f:facet>
+							</p:dataTable>
+
+						</p:panel>
+					</p:panel>
+				</h:form>
+
+			</p:dialog>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

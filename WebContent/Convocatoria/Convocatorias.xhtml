@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_convocatoria2.png"
+			title="Menú > Convocatoria" />
+		<p:outputLabel value="Convocatoria" title="Menú > Convocatoria" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="0">
+			<p:menuitem value="Inicio Convocatorias" title="Inicio Convocatorias"
+				style="font-weight: bold;" url="Convocatorias.jsf" />
+			<p:menuitem value="Crear Nueva" title="Crear Nueva"
+				url="/Convocatoria/CrudConvocatoria.jsf" />
+			<p:menuitem value="Histórico" title="Histórico"
+				url="/Convocatoria/HistoricoConvocatorias.jsf" />
+		</p:tabMenu>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/menuPrincipal/btn_convocatoria2.png" />
+	</ui:define>
+</ui:composition>
+</html>

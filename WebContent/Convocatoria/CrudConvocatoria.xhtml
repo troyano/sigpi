@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<body>
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_convocatoria2.png"
+				title="Menú > Convocatoria" />
+			<p:outputLabel value="Convocatoria"
+				title="Menú > Convocatoria" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="1">
+				<p:menuitem value="Inicio Convocatorias"
+					title="Inicio Convocatorias" url="Convocatorias.jsf" />
+				<p:menuitem value="Crear Nueva" 
+					title="Crear Nueva" style="font-weight: bold;"
+					url="/Convocatoria/CrudConvocatoria.jsf" />
+				<p:menuitem value="Histórico" title="Histórico"
+					url="/Convocatoria/HistoricoConvocatorias.jsf" />
+			</p:tabMenu>
+		</ui:define>
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+				<p:dataTable id="dataTable" var="con"
+					value="#{convocatoriaBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="userDataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+					emptyMessage="No se han encontrado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{con.idConvocatoria}"
+					selection="#{convocatoriaBean.selected}" selectionMode="single">
+
+					<f:facet name="header">
+						<h:outputLabel value="Convocatorias" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{con.nombreConvocatoria}">
+						<f:facet name="header">
+							<h:outputText value="Nombre Convocatoria" />
+						</f:facet>
+						<h:outputText value="#{con.nombreConvocatoria}" />
+					</p:column>
+
+					<p:column sortBy="#{con.fechaApertura}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Fecha Apertura" />
+						</f:facet>
+						<h:outputText value="#{con.fechaApertura}" />
+					</p:column>
+
+					<p:column sortBy="#{con.fechaCierre}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Fecha Cierre" />
+						</f:facet>
+						<h:outputText value="#{con.fechaCierre}" />
+					</p:column>
+
+					<p:column sortBy="#{con.fechaPublicacion}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Fecha Publicación" />
+						</f:facet>
+						<h:outputText value="#{con.fechaPublicacion}" />
+					</p:column>
+
+					<p:column sortBy="#{con.estadoConvocatoria}"
+						style="width:2%; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="Activo"
+							rendered="#{con.estadoConvocatoria==0}">
+						</h:outputText>
+						<h:outputText value="Inactivo"
+							rendered="#{con.estadoConvocatoria==1}" />
+					</p:column>
+
+
+					<p:column style="width:1%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{convocatoriaBean.selected}" value="#{con}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if  (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							ActionListener="#{convocatoriaBean.eliminareditar()}"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:dialog header="Detalle de la Convocatoria"
+				widgetVar="updateDialog" id="updateDlg" resizable="false"
+				showEffect="fade" hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+					<p:panel id="panelCrearSemillero">
+						<p:messages id="msgs" autoUpdate="true" />
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+							<h:outputText value="Nombre" />
+							<p:inputText id="nombre"
+								value="#{convocatoriaBean.selected.nombreConvocatoria}"
+								required="true" requiredMessage="Nombre es Obligatorio"
+								label="Nombre">
+								<p:ajax update="msgnombre" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombre" id="msgnombre" display="icon" />
+
+							<h:outputText value="Fecha Apertura" />
+							<p:calendar id="fechaApertura" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.selected.fechaApertura}"
+								required="true" requiredMessage="Fecha Apertura es Obligatorio"
+								label="Fecha Apertura">
+								<p:ajax update="msgfechaApertura" event="keyup" onstart="true" />
+							</p:calendar>
+							<p:message for="fechaApertura" id="msgfechaApertura"
+								display="icon" />
+
+							<h:outputText value="Fecha Cierre" />
+							<p:calendar id="fechaCierre" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.selected.fechaCierre}" required="true"
+								requiredMessage="Fecha Cierre es Obligatorio"
+								label="Fecha Cierre">
+								<p:ajax update="msgfechaCierre" event="keyup" onstart="true" />
+							</p:calendar>
+							<p:message for="fechaCierre" id="msgfechaCierre" display="icon" />
+
+							<h:outputText value="Fecha Publicación" />
+							<p:calendar id="fechaPublicacion" showOn="button"
+								styleClass="input" pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.selected.fechaPublicacion}"
+								required="true"
+								requiredMessage="Fecha Publicación es Obligatorio"
+								label="Fecha Publicación">
+								<p:ajax update="msgfechaPublicacion" event="keyup"
+									onstart="true" />
+							</p:calendar>
+							<p:message for="fechaPublicacion" id="msgfechaPublicacion"
+								display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{convocatoriaBean.selected.estadoConvocatoria}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','updateDetailForm'); "
+									actionListener="#{convocatoriaBean.editar()}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear nueva Convocatoria" widgetVar="newDialog"
+				update="newForm,panelCrearSemillero" resizable="false" id="newDlg"
+				modal="true">
+				<h:form id="newForm" enctype="multipart/form-data">
+					<p:panel id="panelCrearSemillero">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3" style="margin:0 auto;">
+
+							<h:outputText value="Nombre" />
+							<p:inputText id="nombre"
+								value="#{convocatoriaBean.convocatoria.nombreConvocatoria}"
+								required="true" requiredMessage="Nombre es Obligatorio"
+								label="Nombre">
+								<p:ajax update="msgnombre" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="nombre" id="msgnombre" display="icon" />
+
+							<h:outputText value="Fecha Apertura" />
+							<p:calendar id="fechaApertura" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.convocatoria.fechaApertura}"
+								required="true" requiredMessage="Fecha Apertura es Obligatorio"
+								label="Fecha Apertura">
+								<p:ajax update="msgfechaApertura" event="keyup" onstart="true" />
+							</p:calendar>
+							<p:message for="fechaApertura" id="msgfechaApertura"
+								display="icon" />
+
+							<h:outputText value="Fecha Cierre" />
+							<p:calendar id="fechaCierre" showOn="button" styleClass="input"
+								pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.convocatoria.fechaCierre}"
+								required="true" requiredMessage="Fecha Cierre es Obligatorio"
+								label="Fecha Cierre">
+								<p:ajax update="msgfechaCierre" event="keyup" onstart="true" />
+							</p:calendar>
+							<p:message for="fechaCierre" id="msgfechaCierre" display="icon" />
+
+							<h:outputText value="Fecha Publicación" />
+							<p:calendar id="fechaPublicacion" showOn="button"
+								styleClass="input" pattern="yyyy-MM-dd"
+								value="#{convocatoriaBean.convocatoria.fechaPublicacion}"
+								required="true"
+								requiredMessage="Fecha Publicación es Obligatorio"
+								label="Fecha Publicación">
+								<p:ajax update="msgfechaPublicacion" event="keyup"
+									onstart="true" />
+							</p:calendar>
+							<p:message for="fechaPublicacion" id="msgfechaPublicacion"
+								display="icon" />
+
+							<h:outputText value="Terminos de Referencia" />
+							<!-- 							<p:fileUpload -->
+							<!-- 								fileUploadListener="#{convocatoriaBean.handleFileUpload()}" -->
+							<!-- 								mode="advanced" -->
+
+							<!-- 								update="messagesterminos"  -->
+
+							<!-- 								label="Examinar"  -->
+							<!-- 								allowTypes="/(\.|\/)(pdf|docx|doc|xls|xlsx|png)$/" -->
+							<!-- 								sizeLimit="52428800" -->
+							<!-- 								invalidFileMessage="Archivo inválido" -->
+							<!-- 								invalidSizeMessage="El archivo es demaciado grande" -->
+							<!-- 								dragDropSupport="false" /> -->
+<!-- 							<p:fileUpload -->
+<!-- 								fileUploadListener="#{convocatoriaBean.handleFileUpload()}" -->
+<!-- 								mode="simple" update="messagesterminos" label="Examinar" -->
+<!-- 								allowTypes="/(\.|\/)(pdf|docx|doc|xls|xlsx|png)$/" -->
+<!-- 								invalidFileMessage="Archivo inválido" -->
+<!-- 								invalidSizeMessage="El archivo es demaciado grande" auto="true" /> -->
+
+<!-- 							<p:growl id="messagesterminos" showDetail="true" /> -->
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{convocatoriaBean.convocatoria.estadoConvocatoria}">
+								<f:selectItem itemValue="0" itemLabel="Activo" />
+								<f:selectItem itemValue="1" itemLabel="Inactivo" />
+							</p:selectOneMenu>
+
+
+							<f:facet name="footer">
+								<p:commandButton icon="ui-icon-disk"
+									update=":form:dataTable,panelCrearSemillero"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									action="#{convocatoriaBean.crear()}" ajax="false" />
+
+								<p:commandButton type="reset" icon=".ui-icon-refresh"
+									update="newForm"></p:commandButton>
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:growl id="growl" showDetail="true" life="5000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

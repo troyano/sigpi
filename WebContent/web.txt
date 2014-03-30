@@ -1,0 +1,71 @@
+<login-config>
+
+<auth-method>FORM</auth-method>
+
+<form-login-config>
+
+<form-login-page>/login.jsp</form-login-page>
+
+<form-error-page>/error.jsp</form-error-page>
+
+</form-login-config>
+
+</login-config>
+
+<pre><security-role>
+ <role-name>ROLEA</role-name>
+ </security-role>
+ <security-role>
+ <role-name>ROLEB</role-name>
+ </security-role></pre>
+
+
+
+
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
+ version="2.4">
+ <login-config>
+ <auth-method>FORM</auth-method>
+ <form-login-config>
+ <form-login-page>/login.jsp</form-login-page>
+ <form-error-page>/error.jsp</form-error-page>
+ </form-login-config>
+ </login-config>
+
+<security-role>
+ <role-name>ROLEA</role-name>
+ </security-role>
+ <security-role>
+ <role-name>ROLEB</role-name>
+ </security-role>
+
+<security-constraint>
+ <web-resource-collection>
+ <web-resource-name>recursosRoleA</web-resource-name>
+ <url-pattern>
+ /recursosRoleA/*
+ </url-pattern>
+ <http-method>GET</http-method>
+ <http-method>POST</http-method>
+ </web-resource-collection>
+ <auth-constraint>
+ <role-name>ROLEA</role-name>
+ </auth-constraint>
+ </security-constraint>
+
+<security-constraint>
+ <web-resource-collection>
+ <web-resource-name>recursosRoleB</web-resource-name>
+ <url-pattern>
+ /recursosRoleB/*
+ </url-pattern>
+ <http-method>GET</http-method>
+ <http-method>POST</http-method>
+ </web-resource-collection>
+ <auth-constraint>
+ <role-name>ROLEB</role-name>
+ </auth-constraint>
+ </security-constraint>
+</web-app>

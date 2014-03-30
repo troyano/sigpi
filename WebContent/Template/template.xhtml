@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title><ui:insert name="title"></ui:insert></title>
+	<h:outputStylesheet name="../recursos/css/Template.css" library="css"></h:outputStylesheet>
+</h:head>
+
+<h:body class="body" style="background:#000;">
+
+	<table class="table" style=" border:1px solid #CAD6E0;
+                    width:100%;
+                    height:100%;
+                    background-color:#FFF;">
+
+		<tr>
+			<td class="td_header"><ui:include src="/Template/header.xhtml" />
+				<!--<ui:insert name="pageHeader">Page Header</ui:insert> --></td>
+		</tr>
+		<tr>
+			<td class="menu">
+        <ui:include src="/Template/menuOpciones.xhtml" />
+    
+			</td>
+		</tr>
+
+		<tr>
+			<td class="td_content"><ui:insert name="body">
+
+					<p:layout style="min-width:400px;min-height:200px;" id="layout">
+					
+						<p:layoutUnit position="west" resizable="true" size="100" minSize="40" maxSize="200">  
+				              
+				        </p:layoutUnit>
+				
+						<p:layoutUnit position="center">  
+					        Page Content  
+					    </p:layoutUnit>
+					    
+					    <p:layoutUnit position="east" resizable="true" size="100" minSize="40" maxSize="200">  
+                              
+                        </p:layoutUnit>
+					</p:layout> 
+			
+			
+			
+			</ui:insert></td>
+		</tr>
+		<tr>
+			<td class="td_footer"><ui:include src="/Template/footer.xhtml" />
+				<!-- <ui:insert name="footer">Page Footer</ui:insert> --></td>
+		</tr>
+
+	</table>
+</h:body>
+
+</html>

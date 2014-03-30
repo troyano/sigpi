@@ -1,0 +1,610 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_proyectos.png"
+			title="Menú > Proyectos" style=" width:32px; heght:32px;" />
+		<p:outputLabel value="Proyectos" title="Menú > Proyectos" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="1">
+			<p:menuitem value="Inicio Proyectos"
+				url="${requestContextPath}/Proyectos/Proyectos.jsf"
+				title="Inicio Proyectos" />
+
+			<p:menuitem value="Nuevo" title="Nuevo" style="font-weight: bold;"
+				url="${requestContextPath}/Proyectos/Nuevo/nuevoProyecto.jsf" />
+
+			<p:menuitem value="Formulación" title="Formulación"
+				url="${requestContextPath}/Proyectos/Formulacion/formulacion.jsf" />
+
+			<p:menuitem value="En Revisión" title="En Revisión"
+				url="${requestContextPath}/Proyectos/EnRevision/enRevision.jsf" />
+
+			<p:menuitem value="En Ejecución" title="En Ejecución"
+				url="${requestContextPath}/Proyectos/EnEjecucion/enEjecucion.jsf" />
+
+			<p:menuitem value="Finalizados" title="Finalizados"
+				url="${requestContextPath}/Proyectos/Finalizados/finalizados.jsf" />
+
+		</p:tabMenu>
+
+	</ui:define>
+	<ui:define name="contenido">
+		<!-- *********************************** Inicio Formulario de crear Proyecto *********************************************************************************** -->
+		<h:form id="formAdd">
+
+			<p:growl id="growl" showDetail="true" />
+			<p:panel id="panel" header="Información básica del nuevo proyecto"
+				style=" background:#F2F2F2;">
+
+				<table align="center" width="100%" border="0">
+					<tr>
+						<td><p:panel id="panelInternoAdd" style="width:100%;"
+								widgetVar="panelI" rendered="#{proyectosBean.tipoAccion == 1}">
+
+								<p:panelGrid style="margin-top:0px; width:100%; ">
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Titulo del Proyecto"
+												style=" width:200px;" />
+										</p:column>
+										<p:column colspan="5" style="font-weight: bold;">
+
+											<p:inputText id="nombreProyectoAdd" required="true"
+												style="width:99%; text-transform:uppercase;"
+												onkeyup="javascript:this.value=this.value.toUpperCase();"
+												requiredMessage="El Nombre del Proyecto es Obligatorio."
+												value="#{proyectosBean.proyecto.nombreProyecto}">
+												<p:ajax update="msgnombreP" event="keyup" onstart="true" />
+											</p:inputText>
+
+										</p:column>
+										<p:column>
+											<p:message for="nombreProyectoAdd" id="msgnombreP"
+												display="icon" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="7"
+											style="font-weight: bold;  text-align:center;">
+											<br />
+											<p:outputLabel value="Ingrese Datos del Lider del Proyecto"
+												style=" text-align:center;  font-weight: bold; width:95%;" />
+											<br />
+											<p:separator />
+										</p:column>
+
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Identificación"
+												style="text-align:left;" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:inputText id="identificacionAdd" required="true"
+												style="width:96%; text-transform:uppercase;"
+												onkeyup="javascript:this.value=this.value.toUpperCase();"
+												requiredMessage="El nombre del Proyecto es Obligatorio."
+												value="#{proyectosBean.personal.identificacion}">
+												<p:ajax update="msgIdentificacionAdd" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:commandButton icon="ui-icon-search" id="buscarIdAdd"
+												title="#{entidad['title.btn_Buscar']}" style=" margin:4px;"
+												update=":formSearch:panelBusqueda" immediate="true"
+												actionListener="#{catalogoBuscarProyectoBean.limpiarCatalogo()}"
+												oncomplete="searchDialog.show()">
+												<p:resetInput target=":formSearch:panelBusqueda" />
+											</p:commandButton>
+										</p:column>
+										<p:column>
+											<p:message for="identificacionAdd" id="msgIdentificacionAdd"
+												display="icon" />
+										</p:column>
+										<p:column colspan="3" />
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Primer Nombre" />
+										</p:column>
+										<p:column colspan="2">
+											<p:inputText id="primer_nombreAdd" required="true"
+												requiredMessage="Campo Primer Nombre es obligatorio."
+												label="Primer Apellido"
+												value="#{proyectosBean.personal.primerNombre}">
+												<p:ajax update="msgPrimerNombreP" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+										<p:column>
+											<p:message for="primer_nombreAdd" id="msgPrimerNombreP"
+												display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Segundo Nombre" />
+										</p:column>
+										<p:column>
+											<p:inputText id="segundo_nombreAdd"
+												value="#{proyectosBean.personal.segundoNombre}" />
+										</p:column>
+										<p:column />
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Primer Apellido" />
+										</p:column>
+										<p:column colspan="2">
+											<p:inputText id="primer_apellidoAdd" required="true"
+												requiredMessage="Campo Primer Apellido es obligatorio."
+												label="Primer Apellido"
+												value="#{proyectosBean.personal.primerApellido}">
+												<p:ajax update="msgPrimerApellidoP" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+										<p:column>
+											<p:message for="primer_apellidoAdd" id="msgPrimerApellidoP"
+												display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Segundo Apellido" />
+										</p:column>
+										<p:column>
+											<p:inputText id="segundo_apellidoAdd"
+												value="#{proyectosBean.personal.segundoApellido}" />
+										</p:column>
+										<p:column />
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Sede / Programa" />
+										</p:column>
+										<p:column colspan="2">
+											<p:selectOneMenu id="sedeProgramaAdd"
+												value="#{proyectosBean.personalProyecto.sedePrograma}"
+												required="true"
+												requiredMessage="Campo Sede / Programa es Obligatorio."
+												label="Sede / Programa">
+												<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+												<f:selectItems
+													value="#{proyectosBean.listaSedesProgramas()}" var="sp"
+													itemLabel="#{sp.sede.nombreSede}- #{sp.programa.nombreCorto}" />
+												<p:ajax update="msgSedeProgramaAdd" event="keyup"
+													onstart="true" />
+												<f:converter converterId="GenericConvertEntity" />
+
+											</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<p:message for="sedeProgramaAdd" id="msgSedeProgramaAdd"
+												display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Tipo Investigador" />
+										</p:column>
+										<p:column>
+											<p:selectOneMenu id="investigadorAdd"
+												value="#{proyectosBean.personalProyecto.tipoPersonal}"
+												required="true"
+												requiredMessage="Campo Investigador es Obligatorio."
+												label="Investigador">
+												<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+												<f:selectItems value="#{proyectosBean.listaTipoPer()}"
+													var="per" itemLabel="#{per.descripcionPersonal}" />
+												<p:ajax update="msgInvestigadorAdd" event="keyup"
+													onstart="true" />
+												<f:converter converterId="GenericConvertEntity" />
+
+											</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<p:message for="investigadorAdd" id="msgInvestigadorAdd"
+												display="icon" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<!-- ********************************************** Panel I   Editar ************************************************************************************* -->
+							</p:panel> <p:panel id="panelInternoEdit" style="width:100%;"
+								widgetVar="panelII" rendered="#{proyectosBean.tipoAccion == 2}">
+
+								<p:panelGrid style="margin-top:0px; width:100%; ">
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Titulo del Proyecto"
+												style=" width:200px;" />
+										</p:column>
+										<p:column colspan="5" style="font-weight: bold;">
+
+											<p:inputText id="nombreProyectoEdit" required="true"
+												style="width:99%; text-transform:uppercase;"
+												onkeyup="javascript:this.value=this.value.toUpperCase();"
+												requiredMessage="El nombre del Proyecto es Obligatorio."
+												value="#{catalogoBuscarProyectoBean.selectedProyecto.nombreProyecto}">
+												<p:ajax update="msgnombrePEdit" event="keyup" onstart="true" />
+											</p:inputText>
+
+										</p:column>
+										<p:column>
+											<p:message for="nombreProyectoEdit" id="msgnombrePEdit"
+												display="icon" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="7"
+											style="font-weight: bold;  text-align:center;">
+											<br />
+											<p:outputLabel value="Detalle del Lider del Proyecto"
+												style=" text-align:center;  font-weight: bold; width:95%;" />
+											<br />
+											<p:separator />
+										</p:column>
+
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Identificación"
+												style="text-align:left;" />
+										</p:column>
+										<p:column colspan="2" style="font-weight: bold;">
+											<p:inputText id="identificacionEdit" required="true"
+												style="width:96%; text-transform:uppercase;"
+												value="#{catalogoBuscarProyectoBean.selectedPersonal.identificacion}"
+												onkeyup="javascript:this.value=this.value.toUpperCase();"
+												requiredMessage="El nombre del Proyecto es Obligatorio.">
+												<p:ajax update="msgIdentificacionEdit" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+									
+										<p:column>
+											<p:message for="identificacionEdit"
+												id="msgIdentificacionEdit" display="icon" />
+										</p:column>
+										<p:column colspan="3" />
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Primer Nombre" />
+										</p:column>
+										<p:column colspan="2">
+											<p:inputText id="primer_nombreEdit" required="true"
+												requiredMessage="Campo Primer Nombre es obligatorio."
+												label="Primer Apellido"
+												value="#{catalogoBuscarProyectoBean.selectedPersonal.primerNombre}">
+												<p:ajax update="msgPrimerNombrePEdit" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+										<p:column>
+											<p:message for="primer_nombreEdit" id="msgPrimerNombrePEdit"
+												display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Segundo Nombre" />
+										</p:column>
+										<p:column>
+											<p:inputText id="segundo_nombreEdit"
+												value="#{catalogoBuscarProyectoBean.selectedPersonal.segundoNombre}" />
+										</p:column>
+										<p:column />
+
+									</p:row>
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Primer Apellido" />
+										</p:column>
+										<p:column colspan="2">
+											<p:inputText id="primer_apellidoEdit" required="true"
+												requiredMessage="Campo Primer Apellido es obligatorio."
+												label="Primer Apellido"
+												value="#{catalogoBuscarProyectoBean.selectedPersonal.primerApellido}">
+												<p:ajax update="msgPrimerApellidoPEdit" event="keyup"
+													onstart="true" />
+											</p:inputText>
+										</p:column>
+										<p:column>
+											<p:message for="primer_apellidoEdit"
+												id="msgPrimerApellidoPEdit" display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Segundo Apellido" />
+										</p:column>
+										<p:column>
+											<p:inputText id="segundo_apellidoEdit"
+												value="#{catalogoBuscarProyectoBean.selectedPersonal.segundoApellido}" />
+										</p:column>
+										<p:column />
+
+									</p:row>
+
+									<p:row>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Sede / Programa" />
+										</p:column>
+										<p:column colspan="2">
+											<p:selectOneMenu id="sedeProgramaEdit"
+												value="#{catalogoBuscarProyectoBean.selected.sedePrograma}"
+												required="true"
+												requiredMessage="Campo Sede / Programa es Obligatorio."
+												label="Sede / Programa">
+												<f:selectItem
+													itemLabel="#{catalogoBuscarProyectoBean.selected.sedePrograma.sede.nombreSede} - #{catalogoBuscarProyectoBean.selected.sedePrograma.programa.nombreCorto}"
+													itemValue="#{catalogoBuscarProyectoBean.personalProyectoBuscar.sedePrograma}" />
+												<f:selectItems
+													value="#{proyectosBean.listaSedesProgramas()}" var="sp"
+													itemLabel="#{sp.sede.nombreSede}- #{sp.programa.nombreCorto}" />
+												<p:ajax update="msgSedeProgramaEdit" event="keyup"
+													onstart="true" />
+												<f:converter converterId="GenericConvertEntity" />
+
+											</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<p:message for="sedeProgramaEdit" id="msgSedeProgramaEdit"
+												display="icon" />
+										</p:column>
+										<p:column style="font-weight: bold;">
+											<p:outputLabel value="Investigador" />
+										</p:column>
+										<p:column>
+											<p:selectOneMenu id="investigadorEdit"
+												value="#{catalogoBuscarProyectoBean.selected.tipoPersonal}"
+												required="true"
+												requiredMessage="Campo Investigador es Obligatorio."
+												label="Investigador">
+												<f:selectItem
+													itemLabel="#{catalogoBuscarProyectoBean.selected.tipoPersonal.descripcionPersonal}"
+													itemValue="#{catalogoBuscarProyectoBean.selected.tipoPersonal}" />
+												<f:selectItems value="#{proyectosBean.listaTipoPer()}"
+													var="per" itemLabel="#{per.descripcionPersonal}" />
+												<p:ajax update="msgInvestigadorEdit" event="keyup"
+													onstart="true" />
+												<f:converter converterId="GenericConvertEntity" />
+
+											</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<p:message for="investigadorEdit" id="msgInvestigadorEdit"
+												display="icon" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:panel></td>
+						<td align="right">
+							<!-- *******************************************************   BOTONES   ******************************************************************** -->
+							<p:panel styleClass="ui-widget ui-widget-header ui-corner-all"
+								style=" width:52px;">
+
+								<p:commandButton icon="ui-icon-plusthick" id="crear"
+									title="#{entidad['title.btn_agregar']}" style=" margin:4px;"
+									rendered="#{proyectosBean.tipoAccion == 0}" immediate="true"
+									actionListener="#{proyectosBean.accionCrear()}"
+									update="formAdd" />
+
+								<p:commandButton icon="ui-icon-pencil" id="editar"
+									title="#{entidad['title.btn_Editar']}" style=" margin:4px;"
+									rendered="#{proyectosBean.tipoAccion == 0}" immediate="true"
+									actionListener="#{proyectosBean.accionEditar()}"
+									update="formAdd" />
+
+								<p:commandButton icon="ui-icon-search" id="buscar"
+									title="#{entidad['title.btn_Buscar']}" style=" margin:4px;"
+									rendered="#{proyectosBean.tipoAccion == 2}"
+									update=":formSearch:panelBusqueda" immediate="true"
+									actionListener="#{catalogoBuscarProyectoBean.limpiarCatalogo()}"
+									oncomplete="searchDialog.show()">
+									<p:resetInput target=":formSearch:panelBusqueda" />
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-disk" id="guardarCrear"
+									title="#{entidad['title.btn_Guardar']}"
+									rendered="#{proyectosBean.tipoAccion == 1}"
+									style=" margin:4px;" ajax="false" update="growl"
+									action="#{proyectosBean.crearProyecto()}"
+									onkeyup="clearForm(formAdd)" />
+
+								<p:commandButton icon="ui-icon-disk" id="guardarEdiacion"
+									title="#{entidad['title.btn_Guardar_Cambios']}"
+									rendered="#{proyectosBean.tipoAccion == 2}"
+									style=" margin:4px;" ajax="false" update="growl"
+									action="#{catalogoBuscarProyectoBean.editar()}"
+									onkeyup="clearForm(formAdd)" />
+
+								<p:commandButton icon="ui-icon-refresh"
+									title="#{entidad['title.btn_limpiar']}"
+									update="panelInternoAdd" style=" margin:4px;"
+									rendered="#{proyectosBean.tipoAccion == 1}" process="@this"
+									actionListener="#{proyectosBean.reset()}" />
+
+								<p:commandButton icon="ui-icon-cancel"
+									title="#{entidad['title.btn_Cancelar']}" style=" margin:4px;"
+									immediate="true" ajax="false"
+									rendered="#{proyectosBean.tipoAccion == 1 or proyectosBean.tipoAccion == 2}"
+									actionListener="#{proyectosBean.inicializar()}"
+									id="accionInicializarAdd"
+									update="panelInternoAdd,panelInternoEdit" />
+
+							</p:panel> <!-- *******************************************************   BOTONES   ******************************************************************** -->
+						</td>
+					</tr>
+				</table>
+			</p:panel>
+		</h:form>
+
+		<!-- INICIO catalogo buscar entidad -->
+
+		<p:dialog header="Buscar Proyecto" widgetVar="searchDialog"
+			update="panel" resizable="false" id="searchDlg" modal="true">
+
+
+			<h:form id="formSearch">
+				<p:growl id="growlGeneral" showDetail="true" />
+				<p:panel id="panelDialog" style=" background:#F2F2F2;">
+
+					<p:panel id="panelBusqueda">
+						<p:panelGrid style="margin-top:0px; width:100%; ">
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Nombre Proyecto" />
+								</p:column>
+								<p:column colspan="3" style="font-weight: bold;">
+									<p:inputText id="nombreProy"
+										style="width:96%; text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+										value="#{catalogoBuscarProyectoBean.proyectoBuscar.nombreProyecto}" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Personal[Sede / Programa]" />
+								</p:column>
+								<p:column colspan="2">
+									<p:selectOneMenu id="sedeProgramaAdd"
+										value="#{catalogoBuscarProyectoBean.personalProyectoBuscar.sedePrograma}">
+										<f:selectItem itemLabel="#{entidad['itemLabel.selecione']}" />
+										<f:selectItems value="#{proyectosBean.listaSedesProgramas()}"
+											var="sp"
+											itemLabel="#{sp.sede.nombreSede}- #{sp.programa.nombreCorto}" />
+										<f:converter converterId="GenericConvertEntity" />
+
+									</p:selectOneMenu>
+								</p:column>
+								<p:column rowspan="2" style="font-weight: bold;">
+									<div align="right">
+										<p:commandButton icon="ui-icon-search" title="Buscar"
+											ActionListener="" update="dataTable"
+											style=" margin:0px 5px 0px 0px;"
+											action="#{catalogoBuscarProyectoBean.dataTable()}" />
+
+										<p:commandButton icon="ui-icon-refresh" update="panelBusqueda"
+											title="Refrescar / Limpiar"
+											actionListener="#{catalogoBuscarProyectoBean.reset()}">
+											<p:resetInput target="formSearch" />
+										</p:commandButton>
+									</div>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Identificación" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:inputText id="identificacion"
+										style=" text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+										value="#{catalogoBuscarProyectoBean.personalBuscar.identificacion}" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Primner Nombre" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:inputText id="nombre" style=" text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+										value="#{catalogoBuscarProyectoBean.personalBuscar.primerNombre}" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:outputLabel value="Primner Apellido" />
+								</p:column>
+								<p:column style="font-weight: bold;">
+									<p:inputText id="apellido" style=" text-transform:uppercase;"
+										onkeyup="javascript:this.value=this.value.toUpperCase();"
+										value="#{catalogoBuscarProyectoBean.personalBuscar.primerApellido}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						<br />
+
+						<p:dataTable id="dataTable" var="pry"
+							value="#{catalogoBuscarProyectoBean.listaPersonalProyecto}"
+							rowIndexVar="rowIndex"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							lazy="true" paginator="true" paginatorPosition="bottom" rows="5"
+							emptyMessage="No se han encontrado resultados con los parametros de búsqueda."
+							rowKey="#{pry.idPersonalProyecto}"
+							selection="#{catalogoBuscarProyectoBean.selected}">
+
+							<f:facet name="header">
+								<h:outputLabel value="Listado de Personal Proyectos" />
+							</f:facet>
+							<p:column selectionMode="single" style="width:2%" />
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="N°" />
+								</f:facet>
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Nombre Proyecto" />
+								</f:facet>
+								<h:outputText value="#{pry.proyecto.nombreProyecto}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Tipo Investigador" />
+								</f:facet>
+								<h:outputText value="#{pry.tipoPersonal.descripcionPersonal}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Identificación" />
+								</f:facet>
+								<h:outputText value="#{pry.personal.identificacion}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText
+									value="#{pry.personal.primerNombre} #{pry.personal.primerApellido}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Sede / Programa" />
+								</f:facet>
+								<h:outputText
+									value="#{pry.sedePrograma.programa.nombreCorto} - #{pry.sedePrograma.sede.nombreSede}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<div align="right">
+
+
+									<p:commandButton icon="ui-icon-circle-check" immediate="true"
+										update=":formSearch:growlGeneral, :formAdd:panelInternoEdit"
+										action="#{catalogoBuscarProyectoBean.agregar()}"
+										title="#{messages['comun.boton.agregar']}"
+										alt="#{messages['comun.boton.agregar']}">
+										<f:setPropertyActionListener
+											target="#{catalogoBuscarProyectoBean.selected}"
+											value="#{pry}" />
+									</p:commandButton>
+
+									<p:commandButton icon="ui-icon-cancel" title="Cancelar"
+										style=" margin:0px 0px 0px 5px;" onclick="searchDialog.hide()" />
+								</div>
+							</f:facet>
+						</p:dataTable>
+
+					</p:panel>
+				</p:panel>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

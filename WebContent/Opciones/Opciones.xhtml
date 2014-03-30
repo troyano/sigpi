@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/Template/Plantilla.xhtml">
+	<ui:define name="titleMenu">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img/32/btn_opciones.png"
+			title="Menú > Variables de Proyecto" />
+		<p:outputLabel value="Variables de Proyecto"
+			title="Menú > Variables de Proyecto" />
+	</ui:define>
+	<ui:define name="menu">
+		<p:tabMenu activeIndex="0">
+			<p:menuitem id="cero" value="Inicio Opciones"
+				style="font-weight: bold;"
+				url="${requestContextPath}/Opciones/Opciones.jsf"
+				title="Inicio Opciones" />
+
+			<p:menuitem id="uno" value="Área de Investigacion"
+				title="Área de Investigacion" url="/Opciones/AreaInvestigacion.jsf" />
+
+			<p:menuitem id="dos" value="Línea de Investigación"
+				title="Línea de Investigación"
+				url="${requestContextPath}/Opciones/LineaInvestigacion.jsf" />
+
+			<p:menuitem id="tres" value="Clasificación Colciencias"
+				title="Clasificación colciencias"
+				url="${requestContextPath}/Opciones/ClasificacionColciencias.jsf" />
+
+			<p:menuitem id="cuatro" value="Grupos de Investigación"
+				title="Grupos de Investigación"
+				url="${requestContextPath}/Opciones/GrupoInvestigacion.jsf" />
+
+			<p:menuitem id="cinco" value="Semillero de Investigación"
+				title="Semillero de Investigación"
+				url="${requestContextPath}/Opciones/SemilleroInvestigacion.jsf" />
+
+			<p:menuitem id="seis" value="Tipo Proyecto" title=" Tipo Proyecto"
+				url="${requestContextPath}/Opciones/TipoProyecto.jsf" />
+
+			<p:menuitem id="siete" value="Rol Investigador"
+				title="Rol Investigador"
+				url="${requestContextPath}/Opciones/TipoPersonal.jsf" />
+
+			<p:menuitem id="ocho" value="Resultados" title="Resultados"
+				url="${requestContextPath}/Opciones/AptEspesificacion.jsf" />
+
+
+		</p:tabMenu>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:graphicImage
+			value="${requestContextPath}/resources/img//menuPrincipal/btn_opciones.png" />
+	</ui:define>
+</ui:composition>
+</html>

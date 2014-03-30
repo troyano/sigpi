@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<ui:composition template="/Template/Plantilla.xhtml">
+		<ui:define name="titleMenu">
+			<h:graphicImage
+				value="${requestContextPath}/resources/img/32/btn_opciones2.png"
+				title="Menú > Variables de Entidades" />
+			<p:outputLabel value="Variables de Entidades"
+				title="Menú > Variables de Entidades" />
+		</ui:define>
+		<ui:define name="menu">
+			<p:tabMenu activeIndex="4">
+				<p:menuitem id="cero" value="Inicio Opciones Entidades"
+					title="Inicio Opciones Entidades"
+					url="/OpcionesEntidades/OpcionesEntidades.jsf" />
+
+				<p:menuitem id="uno" value="Sector" title="Sector"
+					url="/OpcionesEntidades/EntSector.jsf" />
+
+				<p:menuitem id="dos" value="Tamaño Entidad" title="Tamaño Entidad"
+					url="/OpcionesEntidades/EntidadTamano.jsf" />
+
+				<p:menuitem id="tres" value="Tipo Empresa" title="Tipo Empresa"
+					url="/OpcionesEntidades/TipoEmpresa.jsf" />
+
+				<p:menuitem id="cuatro" value="Tipo Entidad" title="Tipo Entidad"
+					url="/OpcionesEntidades/TipoEntidad.jsf" style="font-weight: bold;" />
+
+				<p:menuitem id="cinco" value="Tipo Contribuyente"
+					title="Tipo Contribuyente"
+					url="/OpcionesEntidades/Contribuyente.jsf" />
+
+				<p:menuitem id="seis" value="Codigo CIIU" title="Codigo CIIU"
+					url="/OpcionesEntidades/CodigoCIIU.jsf" />
+
+				<p:menuitem id="siete" value="Rol Entidad" title="Rol Entidad"
+					url="${requestContextPath}/OpcionesEntidades/Rol_entidad.jsf" />
+
+				<p:menuitem id="ocho" value="Variables Financieras"
+					title="Variables Financieras"
+					url="${requestContextPath}/OpcionesEntidades/Variables_financieras.jsf" />
+
+				<p:menuitem id="nueve" value="Indicadores de Variables"
+					title="Indicadores de Variables"
+					url="${requestContextPath}/OpcionesEntidades/Indicadores_variables.jsf" />
+			</p:tabMenu>
+		</ui:define>
+
+		<ui:define name="contenido">
+			<h:form id="form">
+
+				<br />
+
+				<p:commandButton oncomplete="newDialog.show()"
+					icon=" ui-icon-plusthick" title="Crear"
+					style=" margin:0px 1px 0px 1px; float:right; " />
+
+				<br />
+
+				<p:dataTable id="dataTable" var="tipent"
+					value="#{entTipoEntidadBean.mostrarTodos()}" rowIndexVar="rowIndex"
+					styleClass="DataTableStyle"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="No se han encontado resultados"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100"
+					rowKey="#{tipent.idTipoentidad}"
+					selection="#{entTipoEntidadBean.selected}" selectionMode="single">
+
+
+					<f:facet name="header">
+						<h:outputLabel value="Tipo Entidad" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="N°" />
+						</f:facet>
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{tipent.descripcionEntidad}">
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{tipent.descripcionEntidad}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Sector" />
+						</f:facet>
+						<h:outputText value="#{tipent.entSector.nombreSector}" />
+					</p:column>
+					<p:column sortBy="#{tipent.estadoTipoEntidad}">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="ACTIVO"
+							rendered="#{tipent.estadoTipoEntidad==0}" />
+						<h:outputText value="INACTIVO"
+							rendered="#{tipent.estadoTipoEntidad==1}" />
+					</p:column>
+
+
+					<p:column style="width:2%">
+
+						<p:commandButton id="selectButton"
+							update=":updateDetailForm:display"
+							oncomplete="updateDialog.show()" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener
+								target="#{entTipoEntidadBean.selected}" value="#{tipent}" />
+						</p:commandButton>
+						<p:commandButton
+							onclick="if (!confirm('¿Confirma que desea eliminar el registro?')) return false;"
+							actionListener="#{entTipoEntidadBean.eliminareditar()}"
+							update="dataTable" icon="ui-icon-trash" title="Eliminar"
+							style=" margin:0px 0px 0px 5px;" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Detalle Tipo Entidad" widgetVar="updateDialog"
+				id="updtaeDlg" resizable="false" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="updateDetailForm">
+
+					<p:panel id="panelEditarTipoEntidad">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="display" columns="3" cellpadding="4"
+							style="margin:0 auto;">
+
+
+							<h:outputLabel value="Sector" />
+							<p:selectOneMenu id="sectorListEdit"
+								value="#{entTipoEntidadBean.selected.entSector}">
+								<f:selectItem
+									itemLabel="#{entTipoEntidadBean.selected.entSector.nombreSector}"
+									itemValue="#{entTipoEntidadBean.selected.entSector}" />
+								<f:selectItems value="#{entTipoEntidadBean.listaEntSectores()}"
+									var="sect" itemLabel="#{sect.nombreSector}" />
+								<p:ajax update="msgsector" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" for="items" />
+							</p:selectOneMenu>
+							<p:message for="sectorListEdit" id="msgsector" display="icon" />
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entTipoEntidadBean.selected.descripcionEntidad}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Descripción">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entTipoEntidadBean.selected.estadoTipoEntidad}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton update=":form:dataTable, :growl"
+									icon="ui-icon-disk"
+									oncomplete="handleSubmitRequest(xhr, status, args, 'updateDlg','DetailForm'); "
+									actionListener="#{entTipoEntidadBean.editar()}" ajax="true" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog header="Crear Tipo Entidad" widgetVar="newDialog"
+				update="newForm" resizable="false" id="newDlg" showEffect="fade"
+				hideEffect="explode" modal="true">
+				<h:form id="newForm">
+
+					<p:panel id="panelCrearTipoEntidad">
+						<p:messages id="msgs" autoUpdate="true" />
+
+						<p:panelGrid id="displayNew" columns="3"
+							style="margin:0 auto;border:0px;">
+
+
+							<h:outputLabel value="Sector" />
+							<p:selectOneMenu id="sectorList" required="true"
+								requiredMessage="Sector es Obligatorio"
+								value="#{entTipoEntidadBean.entidad.entSector}" label="Sector">
+								<f:selectItem itemLabel="Seleccione" />
+								<f:selectItems value="#{entTipoEntidadBean.listaEntSectores()}"
+									var="tpent" id="sector" required="true"
+									requiredMessage="Sector es Obligatorio"
+									itemLabel="#{tpent.nombreSector}" />
+								<p:ajax update="msgsector" event="keyup" onstart="true" />
+								<f:converter converterId="GenericConvertEntity" />
+							</p:selectOneMenu>
+							<p:message for="sector" id="msgsector" display="icon" />
+
+							<h:outputLabel value="Descripción" />
+							<p:inputText id="descripcion" style="text-transform:uppercase;"
+								onkeyup="javascript:this.value=this.value.toUpperCase();"
+								value="#{entTipoEntidadBean.entidad.descripcionEntidad}"
+								required="true" requiredMessage="Descripción es Obligatorio"
+								label="Tamaño">
+								<p:ajax update="msgdescripcion" event="keyup" onstart="true" />
+							</p:inputText>
+							<p:message for="descripcion" id="msgdescripcion" display="icon" />
+
+							<h:outputText value="Estado " />
+							<p:selectOneMenu id="estado"
+								value="#{entTipoEntidadBean.entidad.estadoTipoEntidad}">
+								<f:selectItem itemValue="0" itemLabel="ACTIVO" />
+								<f:selectItem itemValue="1" itemLabel="INACTIVO" />
+							</p:selectOneMenu>
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton
+									update=":form:dataTable,panelCrearTipoEntidad, :growl"
+									icon="ui-icon-disk" onkeyup="clearForm(newForm)"
+									oncomplete=" handleSubmitRequest(xhr, status, args, 'newDlg','newForm');"
+									actionListener="#{entTipoEntidadBean.crear()}" ajax="true" />
+								<!--  process="@this newUserForm:listagrupos" -->
+								<p:commandButton type="reset"
+									update="newForm,panelCrearTipoEntidad" icon="ui-icon-refresh"></p:commandButton>
+
+							</f:facet>
+						</p:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:growl id="growl" showDetail="true" life="2000" />
+
+			<script type="text/javascript">
+	function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+		dialog = jQuery('#' + dialogName);
+		if (args.validationFailed) {
+			dialog.effect("shake", {
+				times : 3
+			}, 100);
+		} else {
+			clearForm(formName);
+			newDialog.hide();
+			updateDialog.hide();
+		}
+	}
+	function clearForm(formName) {
+		jQuery('#' + formName).each(function() {
+			this.reset();
+		});
+	}
+</script>
+
+		</ui:define>
+	</ui:composition>
+
+
+
+
+</body>
+</html>
